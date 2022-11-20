@@ -1,0 +1,20 @@
+<!--components/tab/bar.wxml-->
+<cover-view class="navBar" wx:if="{{transparentStop > 0}}" style="background: rgba(255,255,255,{{customNavOpacity||0}});{{!customNavOpacity||customNavOpacity < 0.5?'box-shadow: none;':''}};height: {{capsule.barHeight}}px;">
+  <cover-image bindtap="navBack" class="navBar-navIcon" src="https://img.qn.woody.tsingc.com/img_fb23eb58-caff-4b74-9f05-b16f137cab3g" style="top:{{capsule.top}}px;height: {{capsule.height}}px;width: {{capsule.height}}px;"></cover-image>
+  <cover-view class="navBar-pageTitle" style="top:{{capsule.top}}px;width: {{capsule.titleWidth}}px;height: {{capsule.height}}px;line-height:{{capsule.height}}px;text-align: {{titleAlign}};color: {{titleColor||'#FFF'}};">{{title}}</cover-view>
+  <cover-view class="navBar-slot" wx:if="{{slotType=='share'}}" style="right:{{capsule.width+18}}px;top:{{capsule.top}}px;height: {{capsule.height}}px;">
+    <cover-image bindtap="clickSlot" class="nav-share"
+        style="position:absolute;right:0;width:52rpx;height:40rpx;top:calc({{capsule.height/2}}px - 20rpx);"
+        src="https://img.qn.woody.tsingc.com/img_a12575a2-6ca9-4fa2-8dce-c45dcb32873g"></cover-image>
+  </cover-view>
+</cover-view>
+
+<cover-view class="navBar" wx:else style="{{rootStyle}}height: {{capsule.barHeight}}px;">
+  <cover-image bindtap="navBack" class="navBar-navIcon" src="https://img.qn.woody.tsingc.com/img_fb23eb58-caff-4b74-9f05-b16f137cab3g" style="top:{{capsule.top}}px;height: {{capsule.height}}px;width: {{capsule.height}}px;"></cover-image>
+  <cover-view class="navBar-pageTitle" style="top:{{capsule.top}}px;width: {{capsule.titleWidth}}px;height: {{capsule.height}}px;line-height:{{capsule.height}}px;text-align: {{titleAlign}};color: {{titleColor||'#FFF'}};">{{title}}</cover-view>
+  <cover-view class="navBar-slot" wx:if="{{slotType=='share'}}" style="right:{{capsule.width+18}}px;top:{{capsule.top}}px;height: {{capsule.height}}px;">
+    <cover-image bindtap="clickSlot" class="nav-share"
+        style="position:absolute;right:0;width:52rpx;height:40rpx;top:calc({{capsule.height/2}}px - 20rpx);"
+        src="https://img.qn.woody.tsingc.com/img_a12575a2-6ca9-4fa2-8dce-c45dcb32873g"></cover-image>
+  </cover-view>
+</cover-view>

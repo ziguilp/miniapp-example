@@ -1,0 +1,9 @@
+<!-- 缺省页占位信息 -->
+<view>
+    <view class="empty-page" style="{{customStyle}}">
+        <image class="empty-page-image" wx:if="{{image}}" src="{{image}}" mode="heightFix"/>
+        <slot name="image"></slot>
+        <view class="empty-page-content">{{content}}</view>
+        <slot name="text"></slot>
+    </view>
+</view>

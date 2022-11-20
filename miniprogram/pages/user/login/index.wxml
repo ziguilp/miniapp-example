@@ -1,0 +1,24 @@
+<!--pages/user/login/index.wxml-->
+<view class="container">
+    <view class="login-wrap u-m-t-60 u-m-b-100">
+        <!-- <view class="login-index-logo" style="overflow: hidden;">
+            <open-data class="login-index-logo" type="userAvatarUrl"></open-data>
+        </view> -->
+        <image class="login-index-logo" src="{{userInfo.avatar}}" />
+    
+    </view>
+
+    <view class="u-flex-col">
+        <button wx:if="{{!aggreeMent}}" class="btn login-btn u-flex-1 u-m-t-40" style="border-radius: 40rpx;" bindtap="getError">{{can_getuserinfo == 0 ? "通过微信立即授权" : '微信手机号授权登录' }}</button>
+        <button wx:if="{{aggreeMent && can_getuserinfo == 0}}" class="btn login-btn u-flex-1 u-m-t-40" style="border-radius: 40rpx;" bindtap="getUserInfo">通过微信立即授权</button>
+        <button wx:if="{{aggreeMent  && can_getuserinfo == 1}}" class="btn login-btn u-flex-1 u-m-t-40" style="border-radius: 40rpx;" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">微信手机号授权登录</button>
+    </view>
+
+    <view class="login-aggression text-sm color-deep-gray u-p-l-40">
+        <van-checkbox custom-class="check" checked-color="#346C9C" icon-class="check-icon" value="{{ aggreeMent }}" bind:change="onChangeAggree">
+            已阅读并同意<text class="text-sm color-theme" catchtap="openAboutUserHandle">《用户服务协议》</text><text class="text-sm color-theme" catchtap="openYinsiHandle">《隐私保护》</text>
+        </van-checkbox>
+    </view>
+</view>
+
+<!-- <loading hidden="{{ hiddenLoading }}">加载中...</loading> -->

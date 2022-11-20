@@ -1,0 +1,60 @@
+/* pages/user/login/index.wxss */
+page {
+    background: #fff;
+}
+
+.login-wrap {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    padding-top: 62rpx;
+}
+
+.login-btn{
+    width: 640rpx;
+}
+
+.login-index-logo {
+    width: 236rpx;
+    height: 236rpx;
+    border-radius: 50%;
+    background-color: #D8D8D8;
+}
+
+.long-grey-btn {
+    margin: 50rpx 60rpx;
+    width: 630rpx;
+    height: 88rpx;
+    color: #373737;
+    font-size: 32rpx;
+    line-height: 88rpx;
+    border-radius: 44rpx;
+    border: 1rpx solid #999999;
+    background-color: #fff;
+}
+
+.login-aggression {
+    width: 100%;
+    text-align: center;
+    margin-top: 40rpx;
+    font-size: 28rpx;
+    color: #4A4A4A;
+}
+
+.register-agreement {
+    width: 750rpx;
+    text-align: center;
+    font-size: 24rpx;
+    color: #999999;
+    position: fixed;
+    bottom: calc(constant(safe-area-inset-bottom) + 60rpx);
+    bottom: calc(env(safe-area-inset-bottom, 0) + 60rpx);
+}
+
+.register-agreement text {
+    text-decoration: underline;
+}
+
+.van-icon-success:before {
+    color: white;
+}

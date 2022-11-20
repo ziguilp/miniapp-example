@@ -1,0 +1,106 @@
+/* components/common/modal.wxss */
+@import '../../app.scss';
+@import '../../style/variable';
+
+.obtn{
+  margin: 0;
+  padding: 0;
+}
+
+.closebtn {
+  position: absolute;
+  height: 76rpx;
+  width: 76rpx;
+  top: 10rpx;
+  right: 16rpx;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .icon{
+    font-size: 48rpx;
+    color: #fff;
+  }
+}
+
+.woodymodal {
+  box-sizing: border-box;
+  width: 670rpx;
+  border-radius: $border-radius-large;
+  background-color: #FFF;
+  background-size: 100% 100%;
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  &-wrapper{
+    padding-top: 126rpx;
+    position: relative;
+    .bgimg{
+      width: 100%;
+      height: 374rpx;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      background-color: transparent;
+    }
+  }
+  .tag-icon{
+    width: 44rpx;
+    font-size: 58rpx;
+    color: $theme-color;
+    position: absolute;
+    top: -4rpx;
+    left: 50rpx;
+  }
+  .highlight {
+    color: $theme-color;
+    font-size: inherit;
+    line-height: inherit;
+    opacity: 0.84;
+  }
+  .split-line{
+    margin-top: $margin-normal;
+    width: 534rpx;
+    z-index: 2;
+    &+.text-title-sub{
+      margin-top: $margin-sm;
+    }
+  }
+  &-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: $margin-large;
+    z-index: 2;
+  }
+  &-icon {
+    height: 70rpx;
+    width: 70rpx;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+  }
+  &-btns {
+    width: 100%;
+    margin-top: 50rpx;
+    z-index: 2;
+    .btn {
+      width: 534rpx;
+      // flex: 1;
+      text-align: center;
+      &+.btn{
+        margin-top: $margin-normal;
+      }
+    }
+  }
+  &-content{
+    color: $font-color-gray;
+    font-size: $font-size-normal;
+    line-height: 1.5;
+    z-index: 2;
+  }
+}

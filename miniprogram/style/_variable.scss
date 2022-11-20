@@ -1,0 +1,140 @@
+// -----------------颜色--------------------
+$theme-color: #43B244;
+$sub-color: #f75c3e;
+$bg-color: #f9f9f9;
+$border-color: #eee;
+$label-bg-color:#FEF5DA;
+$ligth-theme-bg-color:#ECF7EC;
+$cell-bg-color: rgba(232, 244, 255, .4);
+$font-color-theme: #43B244;
+$font-color-normal: #111;
+$font-color-light-gray: #939393;
+$font-color-deep-gray: #666;
+$font-color-gray: #939393;
+$font-color-gray-light: #cacaca;
+$image-bg-color: rgba($color: #000000, $alpha: 0.03);
+$split-line-color: #F6F7F9;
+
+$color-orange: #f75c3e;
+$color-gold: #FED71A;
+$color-cyan: #56CDE9;
+$color-cyan-opacity: #E2F5FC;
+$color-green-light: #8BFBE0;
+
+// -----------------尺寸----------------------
+$font-size-xxxsm: 18rpx;
+$font-size-xxsm: 20rpx;
+$font-size-xsm: 22rpx;
+$font-size-sm: 24rpx;
+$font-size-normal: 26rpx;
+$font-size-large: 28rpx;
+$font-size-xlarge: 30rpx;
+$font-size-xxlarge: 34rpx;
+$font-size-xxxlarge: 42rpx;
+
+// -----------------边距----------------------
+$margin-sm: 20rpx;
+$margin-normal: 30rpx;
+$margin-large: 40rpx;
+$padding-sm: 20rpx;
+$padding-normal: 32rpx;
+$padding-large: 40rpx;
+
+$container-side: 40rpx;
+
+// -----------------间距----------------------
+$gap-sm: 20rpx;
+$gap-normal: 30rpx;
+$gap-large: 40rpx;
+
+// -----------------阴影&圆角------------------
+$border-radius-sm: 8rpx;
+$border-radius-normal: 12rpx;
+$border-radius-large: 16rpx;
+$border-radius-xlarge: 25rpx;
+$shadow: 0rpx 3rpx 11rpx 0px rgba(221, 221, 221, 0.5);
+
+// -----------------按钮----------------------
+$btn-xsm: 50rpx;
+$btn-sm: 60rpx;
+$btn-normal: 80rpx;
+$btn-large: 88rpx;
+
+
+/**
+* mixin
+*/
+@mixin mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 110;
+    z-index: var(--mask-bg-zindex, 110);
+    background-color: rgba(0, 0, 0, .1);
+    background-color: var(--mask-bg-color, rgba(0, 0, 0, .1));
+}
+
+@mixin ellipsis {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin ellipsis2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+}
+
+@mixin ellipsis3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+}
+
+@mixin ellipsis4 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 4;
+}
+
+@mixin split-line-vertical {
+    display: flow-root;
+    overflow: hidden;
+    height: var(--split-line-height, 100%);
+    border-right: 1rpx solid var(--split-line-color, #DADADA);
+
+    &.dotted {
+        border-style: dotted;
+    }
+
+    &.dashed {
+        border-style: dashed;
+    }
+}
+
+@mixin split-line {
+    width: 100%;
+    border-bottom: 1rpx solid var(--split-line-color, $split-line-color);
+    display: flow-root;
+    overflow: hidden;
+    transform: scaleY(0.5);
+
+    &.dotted {
+        border-style: dotted;
+    }
+
+    &.dashed {
+        border-style: dashed;
+    }
+
+    &-vertical {
+        @include split-line-vertical;
+    }
+}

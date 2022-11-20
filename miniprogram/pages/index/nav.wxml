@@ -1,0 +1,13 @@
+<!--pages/index/nav.wxml-->
+
+<!-- 当使用自定义 custom-navbar 时，页面会被注入 capsule 胶囊的尺寸数据，可以通过控制台AppData查看-->
+<custom-navbar
+    title="自定义nav"
+    rootStyle="background: #346C9C;"
+    titleColor="#FFF"
+>
+</custom-navbar>
+
+<view style="margin-top: {{capsule.barHeight}}px;">
+    <button bindtap="setColorForHome">通过EventBus将首页设置成红色</button>
+</view>

@@ -1,0 +1,888 @@
+@import './variable';
+
+page {
+    background-color: var(--bg-color, $bg-color);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 40rpx);
+}
+
+view,
+text {
+    font-family: PingFangSC-Medium, PingFang SC;
+    color: $font-color-normal;
+    box-sizing: border-box;
+    font-size: $font-size-normal;
+}
+
+image {
+    display: inline-block;
+    background-color: $image-bg-color;
+}
+
+button[plain] {
+    border: 0;
+}
+
+button::after {
+    outline: none;
+    border: none;
+}
+
+.hover {
+    opacity: .75;
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26rpx;
+    color: inherit;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+}
+
+/**
+* 颜色
+*/
+
+.color-primary,
+.color-theme {
+    color: $font-color-theme !important;
+
+    &-sub {
+        color: $theme-color;
+    }
+}
+
+.color-normal {
+    color: $font-color-normal !important;
+}
+
+.color-sub {
+    color: $sub-color !important;
+}
+
+.color-light-gray {
+    color: $font-color-light-gray !important;
+}
+
+.color-deep-gray {
+    color: $font-color-deep-gray !important;
+}
+
+.color-gray {
+    color: $font-color-gray !important;
+}
+
+.color-gold {
+    color: $color-gold !important;
+}
+
+.color-cyan {
+    color: $color-cyan !important;
+}
+
+.color-warning {
+    color: $color-gold !important;
+}
+
+.color-danger,
+.color-orange {
+    color: $color-orange !important;
+}
+
+.color-white {
+    color: #FFF !important;
+}
+
+.bg {
+    background-color: $bg-color;
+
+    &-label {
+        background-color: $label-bg-color;
+    }
+
+    &-theme {
+        background-color: $theme-color;
+        color: #FFF;
+
+        &-light {
+            background-color: $ligth-theme-bg-color;
+        }
+    }
+}
+
+/**
+* 阴影
+*/
+.shadow {
+    box-shadow: $shadow;
+}
+
+.text-shadow {
+    text-shadow: $shadow;
+}
+
+/**
+* 圆
+*/
+.circle {
+    border-radius: 50%;
+}
+
+.br {
+    border-radius: $border-radius-normal;
+
+    &-sm {
+        border-radius: $border-radius-sm;
+    }
+
+    &-large {
+        border-radius: $border-radius-large;
+    }
+
+    &-xlarge {
+        border-radius: $border-radius-xlarge;
+    }
+}
+
+
+/**  
+* 文字
+*/
+text {
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    word-break: break-all;
+}
+
+.text {
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    word-break: break-all;
+
+    &-xxxsm {
+        font-size: $font-size-xxxsm !important;
+    }
+
+    &-xxsm {
+        font-size: $font-size-xxsm !important;
+    }
+
+    &-xsm {
+        font-size: $font-size-xsm !important;
+    }
+
+    &-sm {
+        font-size: $font-size-sm !important;
+    }
+
+    &-nm,
+    &-normal {
+        font-size: $font-size-normal !important;
+    }
+
+    &-large {
+        font-size: $font-size-large !important;
+    }
+
+    &-xlarge {
+        font-size: $font-size-xlarge !important;
+    }
+
+    &-xxlarge {
+        font-size: $font-size-xxlarge !important;
+    }
+
+    &-xxxlarge {
+        font-size: $font-size-xxxlarge !important;
+    }
+
+    &-title {
+        font-size: $font-size-xxxlarge !important;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 600;
+        // font-weight: 500;
+        word-break: break-all;
+    }
+
+    &-title-sub {
+        font-size: $font-size-xlarge !important;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        word-break: break-all;
+    }
+
+    &-title-sub-bold {
+        font-size: $font-size-xlarge !important;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        word-break: break-all;
+    }
+
+    &-title-normal {
+        font-size: $font-size-large !important;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        word-break: break-all;
+    }
+
+    &-regular {
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+    }
+
+    &-light {
+        font-family: PingFangSC-Light, PingFang SC;
+        font-weight: 300;
+    }
+
+    &-bold {
+        font-weight: 500 !important;
+    }
+
+    &-bolder {
+        font-weight: 600 !important;
+    }
+
+    &-underline {
+        text-decoration: underline;
+    }
+
+    &-through {
+        text-decoration: line-through;
+
+        &-custom {
+            position: relative;
+
+            &::before {
+                position: absolute;
+                height: var(--through-height, 2rpx);
+                width: var(--through-width, 100%);
+                background-color: var(--through-color, #999);
+                content: '';
+                top: 50%;
+                transform: translateY(-1rpx) translateX(var(--through-offset-x, 6rpx));
+            }
+        }
+    }
+
+    &-left {
+        text-align: left;
+    }
+
+    &-center {
+        text-align: center;
+    }
+
+    &-right {
+        text-align: right;
+    }
+}
+
+
+/***
+* container
+*/
+.container {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--page-padding-top, $padding-sm);
+    padding: var(--page-padding-x, 32rpx);
+}
+
+/**
+* 块类
+*/
+.pannel {
+    &-block {
+        display: flex;
+        flex-direction: column;
+        background-color: #FFF;
+        border-radius: $border-radius-xlarge;
+        padding: $padding-normal $container-side;
+        margin-top: $margin-sm;
+    }
+
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        &-title {
+            display: inline-flex;
+            align-items: center;
+
+            .icon {
+                display: inline-flex;
+                margin-right: 10rpx;
+                align-items: center;
+                justify-content: center;
+                background-color: $bg-color;
+            }
+
+            .text {
+                color: $font-color-normal;
+                font-size: $font-size-xxxlarge;
+                line-height: 1.4;
+                font-weight: 600;
+            }
+        }
+
+        &-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    }
+
+    &-body {
+        margin-top: 40rpx;
+    }
+
+    &-showmore {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: $padding-normal 0;
+        font-size: $font-size-sm;
+        color: $font-color-gray;
+
+        &-split-line {
+            border-top: 1rpx solid #F5F5F5;
+        }
+
+        .text {
+            font-family: PingFangSC-Light, PingFang SC;
+            font-weight: 300;
+            color: inherit;
+            font-size: $font-size-sm;
+        }
+
+        .icon {
+            font-size: 24rpx;
+            margin-left: 14rpx;
+        }
+    }
+}
+
+
+/**
+* tag
+*
+*/
+.tag {
+    height: 66rpx;
+    border-radius: $border-radius-xlarge;
+    border: 1rpx solid #ff8e005c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 36rpx;
+
+    &-text {
+        font-family: PingFangSC-Light, PingFang SC;
+        font-weight: 300;
+        color: $font-color-theme;
+        line-height: 1;
+        font-size: 30rpx;
+    }
+
+    &-icon {
+        margin-left: 14rpx;
+        font-size: 18rpx;
+        color: $font-color-gray-light;
+    }
+
+    &.minor {
+        background: $label-bg-color;
+        border-color: $label-bg-color;
+
+        .tag-text {
+            color: $font-color-normal;
+        }
+    }
+}
+
+
+
+/**
+* btn
+*/
+button {
+    background-color: transparent;
+
+    &::after {
+        display: none;
+    }
+}
+
+.btn {
+    height: $btn-normal;
+    line-height: $btn-normal - 2rpx;
+    background: $theme-color;
+    border: 1rpx solid $theme-color;
+    box-shadow: 3rpx 3rpx 13rpx 0px rgba(255, 255, 255, 0.4);
+    color: #FFF;
+    font-size: $font-size-large;
+    font-weight: 500;
+    font-family: PingFangSC-Medium, PingFang SC;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-large;
+    padding: 0 $padding-large;
+    box-sizing: border-box;
+
+    .text {
+        color: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    &-minor {
+        background-color: $label-bg-color;
+        color: $font-color-normal;
+        border-color: $label-bg-color;
+        box-shadow: 3rpx 3rpx 13rpx 0px rgba(255, 255, 255, 0.4);
+    }
+
+    &-primary {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 142, 0, 0);
+        box-shadow: 3rpx 3rpx 13rpx 0px RGBA(255, 142, 0, .4);
+        color: $theme-color;
+    }
+
+    &.blank {
+        background-color: transparent;
+        color: $theme-color;
+    }
+
+    &.no-shadow {
+        box-shadow: none;
+    }
+
+    &.round {
+        border-radius: $btn-normal;
+    }
+
+    &.disabled {
+        opacity: 0.6;
+    }
+
+    &-large {
+        height: $btn-large;
+        line-height: $btn-large - 2rpx;
+        font-size: $font-size-xlarge;
+        border-radius: $border-radius-xlarge;
+
+        &.round {
+            border-radius: $btn-large;
+        }
+    }
+
+    &-sm {
+        height: $btn-sm;
+        line-height: $btn-sm - 2rpx;
+        padding: 0 var(--btn-side, $padding-sm);
+        font-size: $font-size-xsm;
+
+        &.round {
+            border-radius: $btn-sm;
+        }
+    }
+
+    &-xsm {
+        height: $btn-xsm;
+        line-height: $btn-xsm - 2rpx;
+        padding: 0 var(--btn-side, $padding-sm);
+        font-size: $font-size-xsm;
+
+        &.round {
+            border-radius: $btn-xsm;
+        }
+    }
+}
+
+.cell-group {
+    .btn {
+        &-primary {
+            background-color: #FFF3E5;
+            color: $font-color-theme;
+        }
+    }
+}
+
+/**
+* 分隔线
+*/
+.split-line {
+    @include split-line;
+}
+
+/**
+* pageLock
+*/
+.page-lock {
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/**
+* scroll-view
+*/
+.scroll-view {
+    display: flex;
+    white-space: nowrap;
+}
+
+
+/**
+loading-wrapper
+**/
+.loading-wrapper {
+    position: absolute;
+    z-index: 100;
+    height: 40rpx;
+    width: 40rpx;
+    top: 50%;
+    left: 50%;
+    margin-left: -20rpx;
+    margin-top: -20rpx;
+}
+
+/**
+* footer-menu
+*/
+.footer-menu {
+    box-sizing: content-box;
+    flex: 1;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 750rpx - $padding-normal * 2;
+    padding: $padding-normal $padding-normal;
+    padding-bottom: calc(env(safe-area-inset-bottom) + #{$padding-normal});
+    background-color: #FFF;
+    box-shadow: 0px -1rpx 16rpx 0px #EEEEEE;
+    z-index: 98;
+
+    .btn+.btn {
+        margin-left: 40rpx;
+    }
+}
+
+/**
+* cell
+*/
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $padding-sm $container-side;
+
+    &-group {
+        padding: 0 $container-side;
+        background-color: $cell-bg-color;
+        border-radius: $border-radius-normal;
+        display: flex;
+
+        .cell {
+            padding: $padding-sm 0;
+        }
+
+        &+& {
+            margin-top: $margin-sm;
+        }
+    }
+
+    &-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &-right {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/** 单行截取 **/
+.text-substring {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/** 多行截取 **/
+.text-substring {
+
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+
+    &.line-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        white-space: unset;
+    }
+
+    &.line-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        white-space: unset;
+    }
+
+    &.line-4 {
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        white-space: unset;
+    }
+}
+
+/**
+* 货币符号
+*/
+.unit {
+    display: inline-block;
+    transform: translateX(var(--unit-offset, 6rpx));
+}
+
+.price-label {
+    display: flex;
+    align-items: center;
+    border-radius: 32rpx;
+    padding: 0 16rpx 0 0;
+
+    .round {
+        display: inline-block;
+        width: 46rpx;
+        height: 46rpx;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 46rpx;
+    }
+}
+
+.ring {
+    animation: ring .8s linear infinite;
+}
+
+@keyframes ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*******----------------------------------START 业务模块代码业务模块代码业务模块代码--------- 公共  ---------------------------------------****/
+
+
+.icon-right {
+    color: #e9e9e9;
+}
+
+/**
+* 书籍
+*/
+.book {
+    &-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: $gap-large;
+        grid-row-gap: $gap-large;
+
+        &-col {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    &-item {
+        width: 100%;
+        height: 260rpx;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        &-cover {
+            width: 100%;
+            height: 100%;
+            border-radius: $border-radius-large;
+
+            image {
+                width: 100%;
+                height: 100%;
+                border-radius: $border-radius-large;
+            }
+        }
+    }
+}
+
+.userinfo {
+    &-avatar {
+        border-radius: 50%;
+        border: var(--avatar-border-width, 8rpx) solid #FFF;
+        height: var(--avatar-height, 140rpx);
+        width: var(--avatar-height, 140rpx);
+        position: relative;
+
+        image {
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        &.small {
+            height: 106rpx;
+            width: 106rpx;
+            border-width: 4rpx;
+        }
+    }
+
+    &-vipmark {
+        width: 65rpx;
+        height: 42rpx;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url(https://img.qn.woody.tsingc.com/img_v2_3c7a0131-59ed-4966-b8c7-64644e1dfb1g);
+
+        &.unactive {
+            filter: grayscale(100%);
+        }
+    }
+}
+
+.vip-user {
+    .userinfo-avatar {
+        &::after {
+            position: absolute;
+            content: '';
+            right: -4rpx;
+            top: -18rpx;
+            height: 48rpx;
+            width: 48rpx;
+            background-image: url(https://img.qn.woody.tsingc.com/img_v2_166f63de-26a2-4756-8771-42e861baf3eg);
+            z-index: 1;
+            background-size: 100% 100%;
+        }
+    }
+}
+
+
+/*******----------------------------------END 业务模块代码业务模块代码业务模块代码--------- 公共  ---------------------------------------****/
+
+/*************表单*************/
+.placeholder {
+    font-size: 26rpx;
+    font-family: PingFangSC-Light, PingFang SC;
+    font-weight: 300;
+    color: #D9D9D9;
+}
+
+.form {
+    &-input {
+        caret-color: $theme-color;
+        padding: 0 30rpx;
+        box-sizing: border-box;
+        height: 80rpx;
+        background: $bg-color;
+        border-radius: $border-radius-large;
+    }
+
+    .btn-large {
+        height: 80rpx;
+        line-height: 78rpx;
+    }
+}
+
+/*************END表单*************/
+.order--aggreement-radio-icon {
+    color: #FFF;
+}
+
+.van-rate__icon {
+    transform: translateY(-2rpx);
+}
+
+.u-form {
+
+    .avatar {
+        height: 90rpx;
+        width: 90rpx;
+    }
+
+    .profile-cell {
+        padding-top: 30rpx;
+        padding-bottom: 30rpx;
+    }
+
+    .profile-cell+.profile-cell {
+        border-top: 1rpx solid #F4F5FB;
+    }
+
+    .profile-cell input,
+    .profile-cell textarea {
+        height: 30rpx;
+        line-height: 1;
+        text-align: right;
+    }
+
+    .profile-cell textarea {
+        width: 300rpx;
+    }
+
+    .save-profile {
+        width: 100%;
+    }
+
+    .wx-switch-input {
+        width: 82rpx !important;
+        height: 42rpx !important;
+        box-sizing: border-box;
+        position: relative;
+        border: 0px !important;
+    }
+
+    .wx-switch-input::before {
+        width: 82rpx !important;
+        height: 42rpx !important;
+        background: #CCCCCC !important;
+        border: 0px solid #CCCCCC !important;
+        box-shadow: none !important;
+        left: 0px;
+        top: 0;
+    }
+
+    .wx-switch-input::after {
+        width: 38rpx !important;
+        height: 38rpx !important;
+        top: 2rpx !important;
+        left: 1px !important;
+        opacity: 1 !important;
+        box-sizing: border-box;
+        box-shadow: none !important;
+        border: 0px !important;
+    }
+}
+
+.van-icon {
+    color: #FFF !important;
+}
+
+.no-shadow {
+    box-shadow: none !important;
+}

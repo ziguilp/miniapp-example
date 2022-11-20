@@ -1,0 +1,13 @@
+{
+  "name": "h5tomina",
+  "version": "1.0.0",
+  "description": "H5跳转小程序",
+  "main": "index.js",
+  "author": "turbole@126.com",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "wx-server-sdk": "^2.3.2"
+  }
+}

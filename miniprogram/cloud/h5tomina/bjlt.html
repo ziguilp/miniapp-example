@@ -1,0 +1,238 @@
+<html>
+  <head>
+    <title>阅借会员</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <script>
+
+      (function(doc, win) {
+        var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function() {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return;
+                if (clientWidth >= 750) {
+                    docEl.style.fontSize = '100px';
+                } else {
+                    docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                }
+            };
+    
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+        doc.addEventListener('DOMContentLoaded', recalc, false);
+    })(document, window);
+
+      window.onerror = e => {
+        console.error(e)
+        //alert(JSON.stringify(e))
+      }
+    </script>
+    <!-- weui 样式 -->
+    <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/2.4.1/weui.min.css"></link>
+    <!-- 调试用的移动端 console -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/eruda"></script> -->
+    <!-- <script>eruda.init();</script> -->
+    <!-- 公众号 JSSDK -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <!-- 云开发 Web SDK -->
+    <script src="https://res.wx.qq.com/open/js/cloudbase/1.1.0/cloud.js"></script>
+    <script>
+      var config = {
+        appId: 'wxefd44fb2e12b246e',
+        envId: 'lite-9gw4e7ynd644069d'
+      }
+
+      var defaltUrl = '/pages/index/index?scene=39601933e2be40f0aaf1c18e96144d28'
+
+      function docReady(fn) {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+          fn()
+        } else {
+          document.addEventListener('DOMContentLoaded', fn);
+        }
+      }
+
+      docReady(async function() {
+        var ua = navigator.userAgent.toLowerCase()
+        var isWXWork = ua.match(/wxwork/i) == 'wxwork'
+        var isWeixin = !isWXWork && ua.match(/micromessenger/i) == 'micromessenger'
+        var isMobile = false
+        var isDesktop = false
+        if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|IEMobile)/i)) {
+          isMobile = true
+        } else {
+          isDesktop = true
+        }
+
+        //微信内启动按钮
+        var launchBtn = document.getElementById('launch-btn')
+        //非微信环境启动按钮
+        var buttonEl = document.getElementById('public-web-jump-button')
+
+        if (isWeixin) {
+          //移除按钮
+          buttonEl.remove()
+
+          launchBtn.addEventListener('ready', function (e) {
+            console.log('开放标签 ready')
+			      launchBtn.setAttribute("path", window.location.search ? window.location.search.replace(/^\?path=/,'') : defaltUrl)
+          })
+          launchBtn.addEventListener('launch', function (e) {
+            console.log('开放标签 success')
+          })
+          launchBtn.addEventListener('error', function (e) {
+            console.log('开放标签 fail', e.detail)
+          })
+
+          wx.config({
+            // debug: true, // 调试时可开启
+            appId: config.appId, // <!-- replace -->
+            timestamp: 0, // 必填，填任意数字即可
+            nonceStr: 'nonceStr', // 必填，填任意非空字符串即可
+            signature: 'signature', // 必填，填任意非空字符串即可
+            jsApiList: ['chooseImage'], // 必填，随意一个接口即可 
+            openTagList:['wx-open-launch-weapp'], // 填入打开小程序的开放标签名
+          })
+        } else {
+          launchBtn.remove()
+          var c = new cloud.Cloud({
+            // 必填，表示是未登录模式
+            identityless: true,
+            // 资源方 AppID
+            resourceAppid:  config.appId, // <!-- replace -->
+            // 资源方环境 ID
+            resourceEnv: config.envId, // <!-- replace -->
+          })
+          await c.init()
+          window.c = c
+ 
+        }
+      })
+
+      async function openWeapp(onBeforeJump) {
+        var buttonLoadingEl = document.getElementById('public-web-jump-button-loading')
+        buttonLoadingEl.classList.remove('hidden')
+        var c = window.c
+        const res = await c.callFunction({
+          name: 'h5tomina',
+          data: {
+            action: 'getUrlScheme',
+			      path: ( window.location.search ? window.location.search.replace(/^\?path=/,'') : defaltUrl).replace('/index/index/index', '/pages/index/index')
+          },
+        })
+        buttonLoadingEl.classList.add('hidden')
+        console.warn(res)
+        if (onBeforeJump) {
+          onBeforeJump()
+        }
+        location.href = res.result.openlink
+      }
+    </script>
+    <style> 
+      .hidden {
+        display: none;
+      }
+
+      .page{ 
+        background-size: 100% auto;
+        width: 100%; 
+      }
+
+      .full {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+
+
+      .bg{
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+
+      .layout-body{
+        z-index: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+ 
+
+      .imgitem{
+        width: 100%;
+        height: auto;
+      }
+
+      .public-web-jump-button{
+        width: 3.68rem;
+        height: .8rem;
+        background: #FFBE00;
+        border-radius: .5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFF;
+        font-size: .38rem;
+        position: absolute;
+        top: 10.24rem;
+      }
+
+      wx-open-launch-weapp {
+        height: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 1;
+        width: 200px;
+        border-radius: 25px;
+        color: #FFF;
+        margin-top: 30px;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      #public-web-jump-button-loading{
+          margin-top: 0;
+      }
+
+      
+    </style>
+  </head>
+  <body>
+    <div class="page">
+
+      
+      <div class="layout-body">
+
+        <img class="imgitem" src="https://img.qn.woody.tsingc.com/img_v2_916e5035-9792-47e9-9e27-d31c716d1b7g" alt="">
+        <img class="imgitem" src="https://img.qn.woody.tsingc.com/img_v2_b6702fe0-9609-426d-aa6c-e57825c13f6g" alt="">
+        <img class="imgitem" src="https://img.qn.woody.tsingc.com/img_v2_56ae49ee-5702-4fab-81c3-45e5333d2e1g" alt="" style="position: absolute;bottom: 0; ">
+         
+
+        <!-- 非微信环境 -->
+        <a id="public-web-jump-button" href="javascript:" class="weui-btn public-web-jump-button weui-btn_loading" onclick="openWeapp()">
+          <span id="public-web-jump-button-loading" class="weui-primary-loading weui-primary-loading_transparent hidden"><i class="weui-primary-loading__dot"></i></span>
+          立即兑换
+        </a>
+        <!-- ---/非微信环境 -->
+
+        <!-- 微信环境 -->
+
+        <wx-open-launch-weapp id="launch-btn" username="gh_91e15fb0725b" path="/pages/index/index?scene=9c70cfa7872d45f9aa8f02dfa6a4f414"> <!-- replace -->
+           <template>
+            <button style="z-index:99;width: 200px; height: 50px; text-align: center; font-size: 19px; display: block; margin: 0 auto; padding: 8px 24px; border: none; border-radius: 25px; background-color: #FFBE00; color:#fff;">立即兑换</button>
+           </template> 
+        </wx-open-launch-weapp>
+
+        <!-- ---/微信环境 --> 
+
+      </div> 
+
+    </div>
+  </body>
+</html>

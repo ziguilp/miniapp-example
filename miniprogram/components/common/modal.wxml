@@ -1,0 +1,36 @@
+<!--components/common/Confirm.wxml-->
+<text wx:if="{{label}}" catchtap="show">{{label}}</text>
+<van-popup show="{{ showPopup }}" custom-style="background:transparent;margin-top: -76rpx; z-index: 200;{{customStyle}}" overlay-style="{{overlayStyle}}" bind:close="close">
+	<view class="woodymodal-wrapper">
+    <view class="closebtn"  wx:if="{{showClose}}" catchtap="close">
+      <icon class="icon iconfont icon-close icon-guanbi"></icon>
+    </view>
+    <image class="bgimg" wx:if="{{showBgImg}}" style="margin-top: -8rpx;" src="https://img.qn.woody.tsingc.com/img_v2_6f8e6499-3052-4587-a18f-027d933be03g?imageView2/2/h/400"></image>
+    <view class="woodymodal" style="{{modalStyle}}" catchtap="clickbody" id="{{customId}}">
+      <!-- <icon class="icon iconfont icon-tag tag-icon"></icon> -->
+      <icon class="woodymodal-icon" wx:if="{{icon}}" style="background-image: url('{{icon}}');"></icon>
+      <view class="woodymodal-title" wx:if="{{title||titleSub}}">
+        <text class="title text-title" wx:if="{{title}}">{{title}}</text>
+        <view class="split-line" wx:if="{{title}}"></view>
+        <text class="text-title-sub" wx:if="{{titleSub}}"><text class="highlight">{{titleSub}}</text></text>
+      </view>
+      <view class="woodymodal-content" style="{{contentStyle}}">{{content}}<slot name="content"></slot></view>
+      
+      <view class="woodymodal-btns u-col-center {{btnWrapperStyle}}">
+        <block wx:if="{{confirmText}}">
+          <button wx:if="{{confirmOpenType}}" class="obtn btn btn-confirm" catchtap="confirm" style="{{confirmBtnStyle}}" open-type="{{confirmOpenType}}">{{confirmText}}</button>
+          <view wx:else class="btn btn-confirm" catchtap="confirm" style="{{confirmBtnStyle}}">
+            <text class="title">{{confirmText}}</text>
+          </view>
+        </block>
+        <block wx:if="{{cancelText}}">
+          <button wx:if="{{cancelOpenType}}" class="obtn btn btn-minor no-shadow  color-gray" catchtap="cancel"  style="{{cancelBtnStyle}}" open-type="{{cancelOpenType}}">{{cancelText}}</button>
+          <view wx:else class="btn no-shadow btn-minor color-gray" catchtap="cancel" style="{{cancelBtnStyle}}">
+            <text class="title">{{cancelText}}</text>
+          </view>
+        </block>
+      </view>
+      <slot name="bottom"></slot>
+    </view>
+  </view>
+</van-popup>
