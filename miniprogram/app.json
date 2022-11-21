@@ -1,11 +1,12 @@
 {
     "pages": [
         "pages/index/index",
-        "pages/logs/logs",
         "pages/user/login/index",
         "pages/user/profile/index",
         "pages/web/index",
-        "pages/index/nav"
+        "pages/index/nav",
+        "pages/user/about/index",
+        "pages/user/about/qa"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -31,6 +32,24 @@
         "empty-page": "/components/empty/index",
         "custom-navbar": "/components/nav/bar",
         "turbo-modal": "/components/common/modal"
+    },
+    "tabBar": {
+        "selectedColor": "#939393",
+        "borderStyle": "white",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页",
+                "iconPath": "images/icons/icon20.png",
+                "selectedIconPath": "images/icons/icon21.png"
+            },
+            {
+                "pagePath": "pages/user/profile/index",
+                "text": "我",
+                "iconPath": "images/icons/icon10.png",
+                "selectedIconPath": "images/icons/icon11.png"
+            }
+        ]
     },
     "sitemapLocation": "sitemap.json"
 }

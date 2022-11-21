@@ -1,9 +1,9 @@
 
 const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 const b64re = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
-export const weBtoa =  (string:string) => {
-    string = String(string);
-    var bitmap, a, b, c, result = "", i = 0, rest = string.length % 3;
+export const weBtoa = (str: string) => {
+    const string = String(str);
+    let bitmap, a, b, c, result = "", i = 0, rest = string.length % 3;
     for (; i < string.length;) {
         if ((a = string.charCodeAt(i++)) > 255 ||
             (b = string.charCodeAt(i++)) > 255 ||
@@ -16,12 +16,12 @@ export const weBtoa =  (string:string) => {
     return rest ? result.slice(0, rest - 3) + "===".substring(rest) : result;
 };
 
-export const weAtob = (string:string) => {
-    string = String(string).replace(/[\t\n\f\r ]+/g, "");
+export const weAtob = (str: string) => {
+    let string = String(str).replace(/[\t\n\f\r ]+/g, "");
     if (!b64re.test(string))
         throw new TypeError("Failed to execute 'atob' on 'Window': The string to be decoded is not correctly encoded.");
     string += "==".slice(2 - (string.length & 3));
-    var bitmap, result = "", r1, r2, i = 0;
+    let bitmap, result = "", r1, r2, i = 0;
     for (; i < string.length;) {
         bitmap = b64.indexOf(string.charAt(i++)) << 18 | b64.indexOf(string.charAt(i++)) << 12 |
             (r1 = b64.indexOf(string.charAt(i++))) << 6 | (r2 = b64.indexOf(string.charAt(i++)));
@@ -33,17 +33,17 @@ export const weAtob = (string:string) => {
 };
 
 
-export const b64DecodeUnicode = (str:string) => {
-    return decodeURIComponent(exports.weAtob(str).replace(/(.)/g, function (p:string) {
-        var code = p.charCodeAt(0).toString(16).toUpperCase();
+export const b64DecodeUnicode = (str: string) => {
+    return decodeURIComponent(exports.weAtob(str).replace(/(.)/g, function (p: string) {
+        let code = p.charCodeAt(0).toString(16).toUpperCase();
         if (code.length < 2) {
             code = "0" + code;
         }
         return "%" + code;
     }));
 }
-export const base64_url_decode = (str:string) => {
-    var output = str.replace(/-/g, "+").replace(/_/g, "/");
+export const base64_url_decode = (str: string) => {
+    let output = str.replace(/-/g, "+").replace(/_/g, "/");
     switch (output.length % 4) {
         case 0:
             break;
@@ -64,11 +64,11 @@ export const base64_url_decode = (str:string) => {
     }
 }
 
-export interface JwtDecodeOptionProp{
+export interface JwtDecodeOptionProp {
     header?: boolean
 }
 
-export interface JwtResult{
+export interface JwtResult {
     alg: string,
     typ: string,
     id?: string,
@@ -76,14 +76,14 @@ export interface JwtResult{
     userId?: string,
     iat: number,
     exp: number,
-    [key:string]: any
+    [key: string]: any
 }
 
-export const jwtDecode = (token:string, options?:JwtDecodeOptionProp) => {
+export const jwtDecode = (token: string, opt?: JwtDecodeOptionProp) => {
     if (typeof token !== "string") {
         throw ("Invalid token specified");
     }
-    options = options || {};
+    let options = opt || {};
     let pos = options.header === true ? 0 : 1;
     try {
         return JSON.parse(base64_url_decode(token.split(".")[pos])) as JwtResult;

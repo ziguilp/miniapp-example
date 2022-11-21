@@ -48,22 +48,22 @@ export class EventBus {
 
 
     once(event: string, listener: TurboEventBusListener) {
-        let self = this, events = self[name], container = events[event] = events[event] || [], id = this.randomId(), index, callback: any = () => {
+        let events = this[name], container = events[event] = events[event] || [], id = this.randomId(), index, callback: any = (...arg:any) => {
             index = this.findIndexById(container, id);
             index >= 0 && container.splice(index, 1);
-            listener.apply(self, arguments);
+            listener.apply(this, arg);
         };
         callback[id_Identifier] = id;
         container.push(callback);
     }
 
     emit(...arg:any) {
-        const self = this, argv = [].slice.call(arguments), event = argv.shift(), events = self[name];
+        const argv = [].slice.call(arg), event = argv.shift(), events = this[name];
         // @ts-ignore
-        ((events['*'] || []).concat(events[event] || [])).map((listener) => self.emitting(event, argv, listener));
+        ((events['*'] || []).concat(events[event] || [])).map((listener) => this.emitting(event, argv, listener));
     }
 
-    emitting(event: string, dataArray: any[], listener: Function) {
+    emitting(event: string, dataArray: any[], listener: TurboEventBusListener) {
         listener.apply(this, dataArray);
     }
 

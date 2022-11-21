@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
+        "baseUrl": ".",
         "types": ["miniprogram-api-typings"],
         "strictNullChecks": true,
         "noImplicitAny": true,

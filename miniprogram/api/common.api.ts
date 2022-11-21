@@ -19,16 +19,16 @@ export default {
                 position
             }
         })).data.data;
-        return list.reduce((p:any,c:any) => {
+        return list.reduce((p: any, c: any) => {
             const key = `${c.page_path}_${c.position}`
-            if(p[key]){
+            if (p[key]) {
                 p[key].push(c)
             }
-            else{
+            else {
                 p[key] = [c]
             }
             return p
-        },{})
+        }, {})
     },
     /**
      * 直接生成海报
@@ -43,13 +43,13 @@ export default {
         data,
         expiredTime = 86400,
         cacheIdx = ''
-    }:any) {
+    }: any) {
         //随机定义路径名称
         const times = new Date().getTime();
         const fileName = `${wx.env.USER_DATA_PATH}/template_poster_tid_${templateId}_${times}.png`;
         const cacheKey = `${wx.env.USER_DATA_PATH}/template_poster_tid_${templateId}_${cacheIdx}`;
         const fs = wx.getFileSystemManager();
-        let localCache = getApp().getEnvStorageSync(`template_post_cache`) || {};
+        const localCache = getApp().getEnvStorageSync(`template_post_cache`) || {};
         if (expiredTime > 0 && cacheIdx) {
             if (localCache.hasOwnProperty(cacheKey) && localCache[cacheKey].localPath && localCache[cacheKey].expiredTime > times) {
                 try {
@@ -116,7 +116,7 @@ export default {
         acodeData,
         expiredTime = 86400,
         cacheIdx
-    }:any) {
+    }: any) {
         let qrcodeUrl = null;
         if (acodeData) {
             let sceneQrcodeData = await sceneApi.getSceneContent({

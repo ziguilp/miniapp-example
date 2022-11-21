@@ -1,26 +1,26 @@
 import dayjs from 'dayjs';
-import { IAppOption, IUserInfo } from '../../typings';
 import jwtDecode from '../vendor/jwt-decode';
+import { IAppOption, IUserInfo, TurboFn } from '../../typings';
 import { login } from './http';
 
 export const Log = () => {
-    let log = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
+    const log = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
     return {
         info(...arg: any) {
             if (!log) return
-            log.info.apply(log, arg)
+            log.info(...arg)
         },
         log(...arg: any) {
             if (!log) return
-            log.info.apply(log, arg)
+            log.info(...arg)
         },
         warn(...arg: any) {
             if (!log) return
-            log.warn.apply(log, arg)
+            log.warn(...arg)
         },
         error(...arg: any) {
             if (!log) return
-            log.error.apply(log, arg)
+            log.error(...arg)
         },
         setFilterMsg(msg: string) { // 从基础库2.7.3开始支持
             if (!log || !log.setFilterMsg) return
@@ -61,7 +61,7 @@ export const toLine = (string: string) => {
 /**
  * Object-key
  */
-export const hasKey = (obj: Object, key: string): boolean => {
+export const hasKey = (obj: Record<string, unknown> | any, key: string): boolean => {
     return obj && obj instanceof Object ? Object.hasOwnProperty.call(obj, key) : false;
 }
 
@@ -197,11 +197,11 @@ export const openSetting = (authType: string) => {
 export const saveImageToPhotosAlbum = (filePath: string) => {
     return new Promise((resolve, reject) => {
         getSetting('writePhotosAlbum')
-            .then(res => {
+            .then(() => {
                 wx.saveImageToPhotosAlbum({ filePath })
-                    .then(res => {
+                    .then(() => {
                         resolve(filePath)
-                    }).catch(err => {
+                    }).catch((err) => {
                         console.log(err);
                         wx.showToast({ title: '保存失败', icon: 'none' })
                         reject(err)
@@ -216,9 +216,9 @@ export const saveImageToPhotosAlbum = (filePath: string) => {
  * @param {*} methodName 
  */
 export const execPageMethod = (pageLoaded: number, methodName: string, args: any) => {
-    let pages = getCurrentPages();
+    const pages = getCurrentPages();
     if (pages.length > pageLoaded) {
-        let prePage = pages[pages.length - pageLoaded - 1];
+        const prePage = pages[pages.length - pageLoaded - 1];
         prePage[methodName] && prePage[methodName](args)
     }
 }
@@ -227,7 +227,7 @@ export const execPageMethod = (pageLoaded: number, methodName: string, args: any
  * 获取当前页面对象
  */
 export const getCurrentPageObj = () => {
-    let len = getCurrentPages().length;
+    const len = getCurrentPages().length;
     return getCurrentPages()[len - 1]
 }
 
@@ -235,7 +235,7 @@ export const getCurrentPageObj = () => {
 * 获取当前页url
 */
 export const getCurrentPageUrl = () => {
-    let pageObj = getCurrentPageObj();
+    const pageObj = getCurrentPageObj();
     return '/' + pageObj.route;
 }
 
@@ -243,8 +243,8 @@ export const getCurrentPageUrl = () => {
 * 获取当前页带参数的url
 */
 export const getCurrentPageUrlWithArgs = (args = {}) => {
-    let pageObj = getCurrentPageObj();
-    let url = pageObj.route;    //当前页面url
+    const pageObj = getCurrentPageObj();
+    const url = pageObj.route;    //当前页面url
     let options = pageObj.options    //获取url中所带的参数对象options
     if (args) {
         options = Object.assign({}, options, args)
@@ -252,7 +252,7 @@ export const getCurrentPageUrlWithArgs = (args = {}) => {
     //拼接url的参数
     let urlWithArgs = '/' + url + '?';
     for (let key in options) {
-        let value = options[key];
+        const value = options[key];
         urlWithArgs += key + '=' + value + '&'
     }
     urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length - 1)
@@ -274,11 +274,11 @@ export const weekParse = (num: number) => {
  * return < 0 用户版本太低
  */
 export const compareVersion = (version: string) => {
-    let surVersion = wx.getSystemInfoSync().SDKVersion;
+    const surVersion = wx.getSystemInfoSync().SDKVersion;
     // console.log(surVersion)
-    let v1 = surVersion.split('.');
-    let v2 = version.split('.');
-    let len = Math.max(v1.length, v2.length)
+    const v1 = surVersion.split('.');
+    const v2 = version.split('.');
+    const len = Math.max(v1.length, v2.length)
 
     while (v1.length < len) {
         v1.push('0')
@@ -287,9 +287,9 @@ export const compareVersion = (version: string) => {
         v2.push('0')
     }
 
-    for (var i = 0; i < len; i++) {
-        var num1 = parseInt(v1[i])
-        var num2 = parseInt(v2[i])
+    for (let i = 0; i < len; i++) {
+        const num1 = parseInt(v1[i])
+        const num2 = parseInt(v2[i])
 
         if (num1 > num2) {
             return 1
@@ -309,7 +309,7 @@ export const subscribeMessage = (tmplIds: string[]): Promise<boolean> => {
             wx.getSetting({
                 withSubscriptions: true
             })
-                .then(res => {
+                .then((res) => {
                     if (res.subscriptionsSetting && !res.subscriptionsSetting.mainSwitch) {
                         TurboModal({
                             title: '提示',
@@ -317,10 +317,11 @@ export const subscribeMessage = (tmplIds: string[]): Promise<boolean> => {
                             confirmText: '不设置',
                             cancelText: '去设置'
                         })
-                            .then(res => {
+                            .then(() => {
                                 Log().warn('warn: 未打开订阅消息权限');
                                 reject(false)
-                            }).catch(err => {
+                            }).catch((err: Error) => {
+                                console.error(err)
                                 wx.openSetting({
                                     withSubscriptions: true,
                                 })
@@ -331,14 +332,15 @@ export const subscribeMessage = (tmplIds: string[]): Promise<boolean> => {
                             tmplIds,
                             success: async (res) => {
                                 // console.log(res)
-                                let flag = tmplIds.findIndex(i => res[i] == "reject") > -1; //有未选中的项
+                                const flag = tmplIds.findIndex((i) => res[i] == "reject") > -1; //有未选中的项
                                 if (flag) {
                                     const confirm = await TurboModal({
                                         title: '提示',
                                         content: '没有勾选可能导致您不能收到相应的消息通知哟',
                                         confirmText: '我知道了',
                                         cancelText: '去设置'
-                                    }).catch(e => {
+                                    }).catch((e: Error) => {
+                                        console.error(e)
                                         wx.openSetting({
                                             withSubscriptions: true,
                                         })
@@ -405,7 +407,7 @@ export const getUserInfo = () => {
         } else {
             userInfo = app.getEnvStorageSync('userInfo') || null
             if (userInfo && userInfo.access_token && !userInfo.expires_time) {
-                let jwtToken = jwtDecode(userInfo.access_token)
+                const jwtToken = jwtDecode(userInfo.access_token)
                 userInfo.expires_time = jwtToken.exp || 0;
             }
         }
@@ -421,8 +423,8 @@ export const getUserInfo = () => {
  * 获取基础用户信息[未登录的会自动登录]
  */
 export const getUserInfoForce = async () => {
-    let userInfo = getUserInfo();
-    let isExpired: boolean = false
+    let userInfo = getUserInfo()
+    let isExpired = false
     if (userInfo) {
         isExpired = (new Date()).getTime() > ((userInfo.expires_time || 0) - 180) * 1000 //提前3分钟
     }
@@ -448,7 +450,7 @@ export const getUserId = () => {
  * 强制获取用户ID[没登录的会自动登录]
  */
 export const getUserIdForce = async () => {
-    let userInfo = await getUserInfoForce();
+    const userInfo = await getUserInfoForce();
     if (userInfo) {
         return userInfo.userId || userInfo.id;
     }
@@ -471,14 +473,14 @@ const getUserOpenIdAndUnionId = async ({
     }
     if (force && !(openId)) {
         wx.cloud.init()
-        let cloudUser: any = (await wx.cloud.callFunction({
+        const cloudUser: any = (await wx.cloud.callFunction({
             name: 'user',
             data: {
                 action: 'getOpenId'
             }
         }))
         if (cloudUser && cloudUser.result) {
-            let {
+            const {
                 openid,
                 unionid
             } = cloudUser.result
@@ -524,18 +526,18 @@ export const getUserToken = ({
  * 打开新页面的方法,自动识别navigateTo,switchTab和web页面和其他小程序
  * @param url 路径：miniapp#appId#path#extraData
  */
-export const openPage = (url: string, callback?: Function) => {
+export const openPage = (url: string, callback?: TurboFn) => {
     if (!url) {
         return console.warn("空的跳转链接")
     }
     if (url.startsWith('miniapp')) {
         // 说明是走打开小程序的路子
         try {
-            let params = url.split("#");
-            let appId = params[1],
+            const params = url.split("#");
+            const appId = params[1],
                 path = params.length > 2 ? params[2] : '',
                 extraDataString = params.length > 3 ? params[3] : '{}';
-            let extraData = JSON.parse(extraDataString)
+            const extraData = JSON.parse(extraDataString)
             wx.navigateToMiniProgram({
                 appId,
                 path,
@@ -549,11 +551,10 @@ export const openPage = (url: string, callback?: Function) => {
         return;
     }
 
-    if (url.startsWith('http')) {
+    if (/^https?:\/\//i.test(url)) {
         // webview
-        url = encodeURIComponent(url);
         return wx.navigateTo({
-            url: `/pages/web/index?url=${url}`,
+            url: `/pages/web/index?url=${encodeURIComponent(url)}`,
             success() {
                 callback && 'function' == typeof callback && callback()
             },
@@ -570,7 +571,7 @@ export const openPage = (url: string, callback?: Function) => {
 
     const testSwtich = (url: string) => {
         // 失败则尝试switchTab
-        let query = parseQueryParams(url)
+        const query = parseQueryParams(url)
         if (query && Object.keys(query).length > 0) {
             getApp().store.state.current_etc = {
                 onLoadOptions: {
@@ -630,9 +631,9 @@ export const calcDicount = ({
     const discout: string = (presentPrice / originalPrice * 100).toFixed(1),
         numStr: string[] = ["", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
     return format.replace(/([\\D|\\S])(\.?)([\\D|\\S]?)/, (rs: any, s1: any, s2: any, s3: any) => {
-        let d0: number = parseInt(discout[0]);
-        let d1: number = parseInt(discout[1]);
-        let res = [s1 == 'D' ? d0 : numStr[d0], s2, d1 ? '' : (s3 == 'D' ? d1 : numStr[d1])];
+        const d0: number = parseInt(discout[0]);
+        const d1: number = parseInt(discout[1]);
+        const res = [s1 == 'D' ? d0 : numStr[d0], s2, d1 ? '' : (s3 == 'D' ? d1 : numStr[d1])];
         return res.join("").replace(/\.$/, '');
     })
 }
@@ -657,15 +658,15 @@ export const parseQueryParams = (url: string) => {
     if (!url || !/\?(.*?)$/.test(url)) {
         return null
     }
-    let queryStr = url.replace(/^([^\?]*?)\?(.*?)$/, "$2")
+    const queryStr = url.replace(/^([^\?]*?)\?(.*?)$/, "$2")
     if (!queryStr) {
         return null
     }
-    let res: any = {},
-        queryStrArr = queryStr.split("&");
-    queryStrArr.forEach(e => {
+    let res: any = {};
+    const queryStrArr = queryStr.split("&");
+    queryStrArr.forEach((e) => {
         try {
-            let kv: string[] = e.split("=");
+            const kv: string[] = e.split("=");
             res[kv[0]] = kv[1]
         } catch (error) {
             console.error(error)
@@ -728,7 +729,7 @@ export const buildLocalUserInfo = (userInfoRes: IUserInfo) => {
     if (userInfoRes.access_token) {
         userInfo.access_token = userInfoRes.access_token;
         userInfo.refresh_token = userInfoRes.access_token;
-        let jwtToken = jwtDecode(userInfo.access_token)
+        const jwtToken = jwtDecode(userInfo.access_token)
         if (jwtToken) {
             userInfo.expires_time = jwtToken.exp
         }

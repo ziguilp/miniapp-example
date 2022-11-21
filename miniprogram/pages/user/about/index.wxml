@@ -1,0 +1,27 @@
+<!--pages/user/about/index.wxml-->
+<view class="container">
+  <view class="about-top">
+    <image class="about-logo" src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.3dmgame.com%2Fuploads%2Fimages%2Fnews%2F20201007%2F1602077049_814329.jpg&refer=http%3A%2F%2Fimg.3dmgame.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1671607520&t=6abfc79088358722bf2119ed649a2ad1"></image>
+    <view class="about-name">产品名称</view>
+    <view class="about-des">
+      产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介产品简介。</view>
+  </view>
+  <view class="pannel-block u-p-t-40 u-p-b-40 u-p-l-0 u-p-r-0">
+    <navigator class="cell" hover-class="none" url="/pages/user/about/qa">
+      <text class="cell-left">常见问题</text>
+      <view class="cell-right">
+        <icon class="icon iconfont icon-right text-xsm"></icon>
+      </view>
+    </navigator>
+    <view class="u-m-l-40 u-m-r-40"><view class="split-line"></view></view>
+    <navigator class="cell" hover-class="none" url="/pages/web/index?url={{h5Url.service}}">
+      <text class="cell-left">会员服务协议</text>
+      <view class="cell-right">
+        <icon class="icon iconfont icon-right text-xsm"></icon>
+      </view>
+    </navigator>
+    <view class="u-m-l-40 u-m-r-40"><view class="split-line"></view></view>
+  </view>
+
+  <view class="about-version u-m-t-40" bindlongpress="clean">当前版本：{{ appVersion }}</view>
+</view>

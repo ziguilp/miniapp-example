@@ -1,1 +1,114 @@
 /* pages/user/profile/index.wxss */
+@import '../../../style/variable';
+
+page{
+    --page-padding-top: 0;
+}
+
+.container{
+    .userinfo{
+        &-block{
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            padding-bottom: 60rpx;
+        }
+        &-avatar{
+            margin-right: $margin-sm;
+        }
+        &-vipmark{
+            margin-left: 14rpx;
+        }
+        &-nickname{
+            .nickname{
+                max-width: 400rpx;
+                @include ellipsis;
+            }
+        }
+    }
+    .agg-info{
+        margin-top: 80rpx;
+        grid-template-columns: repeat(2, 325rpx);
+        grid-column-gap: 20rpx;
+        &-item{
+            background-color: $cell-bg-color;
+            border-radius: $border-radius-normal;
+            padding: 30rpx 40rpx;
+            box-sizing: border-box;
+        }
+    }
+    .banner{
+        border-radius: $border-radius-large;
+        height: 168rpx;
+        &-wrapper{
+            height: 100%;
+            width: 100%;
+        }
+        &-item{
+            height: 100%;
+            width: 100%;
+        }
+        &-image{
+            height: 100%;
+            width: 100%;
+            background-color: transparent;
+        }
+    }
+    .vipcards{
+        margin-top: 104rpx;
+        min-height: 228rpx;
+    }
+    .tools{
+        .cell{
+            padding: 30rpx 0;
+            &-right{
+                position: relative;
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                &::before{
+                    position: absolute;
+                    top: -$padding-normal - 1rpx;
+                    right: 0;
+                    content: '';
+                    @include split-line;
+                }
+            }
+            &:first-child{
+                .cell-right{
+                    &::before{
+                        display: none;
+                    }
+                }
+            }
+        }
+        .imgicon{
+            height: 48rpx;
+            width: 48rpx;
+            margin-right: 16rpx;
+            &-orderlist{
+                background-size: 36rpx 38rpx;
+                background-image: url(https://img.qn.woody.tsingc.com/img_v2_91fd72db-8c32-4aa9-b225-0cb010af7f7g);
+            }
+            &-question{
+                background-size: 42rpx 42rpx;
+                background-image: url(https://img.qn.woody.tsingc.com/img_v2_d4106cd6-bd9c-4b3d-a1c3-032136456e0g);
+            }
+            &-message{
+                background-size: 38rpx 36rpx;
+                background-image: url(https://img.qn.woody.tsingc.com/img_v2_0e7e1715-c8d1-4257-b6af-12b479bdefeg);
+            }
+            &-assistant{
+                background-image: url(https://img.qn.woody.tsingc.com/img_v2_80bf438a-5298-43ac-8d93-dd28a3c70f7g);
+            }
+            &-viplog{
+                background-size: 38rpx 40rpx;
+                background-image: url(https://img.qn.woody.tsingc.com/img_v2_0adcec85-de54-4834-aea3-e9e8fc52501g);
+            }
+            &-exchange{
+                background-size: 42rpx 42rpx;
+                background-image: url(https://img.qn.woody.tsingc.com/img_v2_114d0d99-84f9-4c4a-a29d-c8e2b167541g);
+            }
+        }
+    }
+}

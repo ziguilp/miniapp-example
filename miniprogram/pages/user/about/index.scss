@@ -1,0 +1,35 @@
+/* pages/user/about/index.wxss */
+
+.about{
+    &-top{
+        display:flex;
+        flex-flow:column nowrap;
+        align-items:center;
+        padding:46rpx;
+        padding-top:36rpx;
+        margin-top:22rpx;
+        background-color:#fff;
+    }
+    &-logo{
+        width:160rpx;
+        height:160rpx;
+        border-radius:100%;
+    }
+    &-name{
+        margin-top:10rpx;
+        margin-bottom:22rpx;
+        font-size:32rpx;
+    
+    }
+    &-des{
+        font-size:26rpx;
+        line-height:1.75;
+        color:#999;
+    }
+    &-version{
+        margin-bottom:22rpx;
+        font-size:26rpx;
+        text-align:center;
+        color:#999;
+    }
+}

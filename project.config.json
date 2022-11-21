@@ -38,5 +38,8 @@
     "editorSetting": {
         "tabIndent": "insertSpaces",
         "tabSize": 4
+    },
+    "scripts": {
+        "beforeCompile": "yarn lint"
     }
 }

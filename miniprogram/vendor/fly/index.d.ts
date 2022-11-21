@@ -33,19 +33,20 @@ export interface FlyResponse<T = any> {
     data: T;
     request: FlyRequestConfig;
     engine: any;
-    headers: Object;
+    headers: Record<string, unknown>;
     status?: number;
     statusText?: string;
 }
 
 export interface FlyErrResponse {
     data: any;
-    headers: Object;
+    headers: Record<string, unknown>;
     status: number;
     statusText: string;
 }
 
 export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
+    
 }
 
 export interface FlyRequestInterceptor<V> {

@@ -1,0 +1,28 @@
+<!--pages/user/about/qa.wxml-->
+<view class="container">
+    <view class="user-questions">
+    <block wx:for="{{ list }}" wx:for-item="item" wx:key="key">
+        <view class="qes-li">
+            <!-- 一级标题 -->
+            <view id="{{ index }}" class="qes-title-1" bindtap="toggleClick">
+                <text>{{item.title}}</text>
+                <text class="iconfont icon-gengduo-"></text>
+            </view>
+            <view class="qes-ans">
+                <text wx:if="{{ item.open }}">{{item.answer}}</text>
+            </view>
+        </view>
+    </block>
+
+    </view>
+    <block wx:if="{{ type == 'contcat' }}">
+        <view class="blank-fill" style="background: #fff;"></view>
+        <view class="cart-submit-view">
+            <button class="cart-submit-button w-submit-btn-full" open-type="contact"
+            session-from='{"nickName":"{{ userInfo.userId }}","avatarUrl":"{{ userInfo.avatar }}"}'>
+            在线咨询
+            </button>
+        </view>
+    </block>
+      
+</view>

@@ -23,6 +23,27 @@
                     "query": "",
                     "launchMode": "default",
                     "scene": null
+                },
+                {
+                    "name": "个人主页",
+                    "pathName": "pages/user/profile/index",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "关于我们",
+                    "pathName": "pages/user/about/index",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "常见问题",
+                    "pathName": "pages/user/about/qa",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
                 }
             ]
         }

@@ -30,8 +30,7 @@ export default {
      * @param {*} uuid 
      */
     getAcodeUrlBase(uuid:string) {
-        uuid = uuid.replace(/-/g, '');
-        return `/common/wxacode?scene=${uuid}`
+        return `/common/wxacode?scene=${uuid.replace(/-/g, '')}`
     },
 
     /**
@@ -39,8 +38,7 @@ export default {
      * @param {*} uuid
      */
     getQrcodeUrlBase(uuid:string) {
-        uuid = uuid.replace(/-/g, '');
-        return `${appConfig.cloudHost}/h5tomina/index.html?path=/pages/index/index?scene=${uuid}`
+        return `${appConfig.cloudHost}/h5tomina/index.html?path=/pages/index/index?scene=${uuid.replace(/-/g, '')}`
     },
 
     /**

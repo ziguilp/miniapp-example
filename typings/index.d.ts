@@ -3,6 +3,11 @@
 import { EventBus } from "miniprogram/utils/eventbus";
 import { Store } from "../miniprogram/utils/store";
 
+/**
+ * 通用函数
+ */
+export type TurboFn = (...args:any) => void;
+
 export interface IUserInfo extends WechatMiniprogram.UserInfo {
     id: string,
     userId: string,
@@ -22,7 +27,7 @@ export interface Inavigator {
     success?: Function
 }
 
-export interface SystemInfo extends WechatMiniprogram.SystemInfo{
+export interface SystemInfo extends WechatMiniprogram.SystemInfo {
     rpxRate: number,
     isIos: boolean
 }
@@ -47,8 +52,8 @@ export interface IAppOption {
     $sentry: any,
     $teaReport(event: string, data: any): void,
     navigator(opt: Inavigator): void,
-    parseScanUri(options:any):void,
-    sceneReport(options: any, isAppOnLanch: boolean): void,
+    parseScanUri(options: WechatMiniprogram.App.LaunchShowOption): void,
+    sceneReport(options: WechatMiniprogram.App.LaunchShowOption, isAppOnLanch: boolean): void,
     setToken(token: string): void,
     getEnvStorageSync(key: string): any,
     setEnvStorageSync(key: string, data: any): void,
@@ -61,3 +66,70 @@ export interface IAppOption {
     clearEnvStorageSync(): void,
 }
 
+export interface AppConfigHostConfig{
+    /**
+     * 接口服务
+     */
+    host: string;
+    /**
+     * 海报生成服务
+     */
+    posterHost: string;
+    /**
+     * 短链生成key
+     */
+    shortLinkApiKey: string;
+    /**
+     * graphql服务
+     */
+    graphql: {
+        url: string
+    };
+}
+
+export interface AppConfigProp {
+    /**
+     * 环境配置
+     */
+    env: 'dev' | 'test' | 'prod',
+    /**
+     * 小程序版本号
+     */
+    version: string,
+    /**
+     * CMS客户端版本号
+     */
+    cmsVersion:string,
+    /**
+     * 路由未找到时处理规则
+     */
+    appNotFindRules: {
+        [key:string]: any
+    },
+    /**
+     * 开发环境
+     */
+    dev: AppConfigHostConfig,
+    /**
+     * 测试环境
+     */
+    test: AppConfigHostConfig,
+    /**
+     * 生产环境
+     */
+    prod: AppConfigHostConfig,
+    /**
+     * 默认分享配置
+     */
+    share: {
+        title: string,
+        image?:string
+    },
+    /**
+     * H5连接配置
+     */
+    h5Url: {
+        [key:string]: string
+    },
+    [key:string]: any
+}

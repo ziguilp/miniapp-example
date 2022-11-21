@@ -8,7 +8,7 @@ fly.interceptors.request.use((request: FlyRequestConfig) => {
     console.log('[request]', request)
     if (typeof request.withoutToken == 'undefined' || request.withoutToken === false) {
         console.log(`需要token`)
-        let token = util.getUserToken();
+        const token = util.getUserToken();
         console.log(`token`, token)
         if (token) request.headers.Authorization = `Bearer ${token}`
     } else {
@@ -22,7 +22,7 @@ fly.interceptors.response.use(
         wx.stopPullDownRefresh()
         console.log('【RESPONCE】', response)
         try {
-            let { request } = response;
+            const { request } = response;
             if (response.status == 200 && response.data && response.data.code == 200 && response.data.data && request && /\/api\/user\/login/.test(request.url || '') && request.body.hasOwnProperty('channelId')) {
                 getApp().removeEnvStorageSync("channel_id");
             }
@@ -37,7 +37,7 @@ fly.interceptors.response.use(
             // let result = await login()
             // 为了防止影响登录注册，故仅采取重试策略
             await util.sleep(1200);
-            let result = await login();;
+            const result = await login();
             if (result) {
                 //console.log('静默登录成功')
                 return fly.request(response.request) //暂时先注掉，因为token是在url里面拼接的
@@ -54,7 +54,7 @@ fly.interceptors.response.use(
                 }
 
                 if (showErrorMsg === true) {
-                    let message = response.data.errors ? response.data.errors[0].message : '系统繁忙~'
+                    const message = response.data.errors ? response.data.errors[0].message : '系统繁忙~'
                     message && wx.showToast({ title: message, icon: 'none' })
                 } else if (showErrorMsg) {
                     wx.showToast({ title: showErrorMsg, icon: 'none' })
@@ -72,7 +72,7 @@ fly.interceptors.response.use(
         // console.error(err)
         getApp().$sentry.captureException(err)
         try {
-            let { response, request } = err
+            const { response, request } = err
             console.log({ response, request })
             if (!response) {
                 console.log(`空反馈`, response)
@@ -80,7 +80,7 @@ fly.interceptors.response.use(
                 // let result = await login()
                 // 为了防止影响登录注册，故仅采取重试策略
                 await util.sleep(1200);
-                let result = await login();
+                const result = await login();
                 if (result) {
                     //console.log('静默登录成功')
                     return fly.request(request||{}) 
@@ -89,10 +89,10 @@ fly.interceptors.response.use(
                     return Promise.reject('未登录')
                 }
             }
-            let { data: { message } }: any = response;
-            let showErrorMsg = request && request.hasOwnProperty('showErrorMsg') ? request.showErrorMsg : true
+            const { data: { message } }: any = response;
+            const showErrorMsg = request && request.hasOwnProperty('showErrorMsg') ? request.showErrorMsg : true
             console.log("[RESP_MESSAGE]", message)
-            let messagestr = message instanceof Array ? message.join(",") : message;
+            const messagestr = message instanceof Array ? message.join(",") : message;
             if (message) {
                 if (showErrorMsg) {
                     wx.showToast({
@@ -137,8 +137,8 @@ fly.interceptors.response.use(
  * @param {*} mustAuth 该页面是否引导授权
  */
 export const httpRequest = (requestParam: TurboRequestParam):Promise<FlyPromise<any>> => {
-    let { url, method = 'GET', data = {}, mustAuth, options = {} } = requestParam;
-    let token = util.getUserToken();
+    const { url, method = 'GET', data = {}, mustAuth, options = {} } = requestParam;
+    const token = util.getUserToken();
     if (mustAuth && !token) {
         wx.navigateTo({ url: '/pages/user/pages/login/index' });
         return Promise.reject('暂未登录')
@@ -168,10 +168,11 @@ loginFly.config.baseURL = config.host;
 /**
  * 自动登录
  */
-export const login = async (options: any = {}) => {
+export const login = async (opt?: WechatMiniprogram.App.LaunchShowOption) => {
+    const options = opt|| {} as WechatMiniprogram.App.LaunchShowOption;
     const query = options.query || {}
     const scene = query.scene || options.scene || '';
-    let uuid = (scene.length === 32 || scene.length === 36) ? scene : ''; //uuid
+    const uuid = (scene.length === 32 || scene.length === 36) ? scene : ''; //uuid
     // if(!uuid){
     //     uuid =  getApp().getEnvStorageSync("sceneId") || ''
     // }
@@ -186,12 +187,12 @@ export const login = async (options: any = {}) => {
     } catch (error) {
 
     }
-    let res = await loginFly.get({
+    const res = await loginFly.get({
         url: `/auth/third/login/wechat/wechat_miniapp?code=${code}&scene=${uuid}`
     }).catch(console.error)
     if (res && res.status == 200) {
-        let userInfoRes = res.data.data.userInfo
-        let userInfo = buildLocalUserInfo(userInfoRes)
+        const userInfoRes = res.data.data.userInfo
+        const userInfo = buildLocalUserInfo(userInfoRes)
         fly.unlock()
         return userInfo
     }

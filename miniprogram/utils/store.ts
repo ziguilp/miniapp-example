@@ -2,8 +2,12 @@ export interface IStoreState {
     [key: string]: any
 }
 
+export interface IStoreActionFn extends Function{
+    '__id__'?: string
+}
+
 export interface IStoreAction {
-    [key: string]: Function
+    [key: string]:IStoreActionFn
 }
 
 
@@ -25,11 +29,11 @@ export class Store {
     }
 
     // 派发action, 统一返回promise action可以直接返回state
-    dispatch(type: string, payload: any) {
+    dispatch(type: string, payload?: any) {
         const update = (res: any) => {
             if (typeof res !== 'object') return res;
             this.setState(res)
-            this.ctxs.map(ctx => {
+            this.ctxs.map((ctx) => {
                 if (!ctx || typeof ctx.setData !== 'function') return
                 if (ctx.hasOwnProperty('$store_mapkey')) {
                     let updaetObj: any = {}
@@ -48,7 +52,7 @@ export class Store {
         if (typeof this.actions[type] !== 'function') return
         const res = this.actions[type](this, payload)
         if (res.constructor.toString().match(/function\s*([^(]*)/)[1] === 'Promise') return res.then(update)
-        else return new Promise(resolve => {
+        else return new Promise((resolve) => {
             update(res)
             resolve(res)
         })
@@ -80,10 +84,9 @@ export class Store {
      * 卸载
      */
     unInstall(ctx: WechatMiniprogram.Page.Instance<Record<string, any>, Record<string, any>>) {
-        console.warn("卸载事件已经注入", "即将卸载store", arguments)
-        let __wxExparserNodeId__ = ctx.hasOwnProperty('__wxExparserNodeId__') ? ctx.__wxExparserNodeId__ : null
+        const __wxExparserNodeId__ = ctx.hasOwnProperty('__wxExparserNodeId__') ? ctx.__wxExparserNodeId__ : null
         if (__wxExparserNodeId__) {
-            this.ctxs = this.ctxs.filter(ce => {
+            this.ctxs = this.ctxs.filter((ce) => {
                 console.warn("正在卸载中")
                 if (ce.hasOwnProperty('__wxExparserNodeId__') && ce.__wxExparserNodeId__ == __wxExparserNodeId__) {
                     console.warn("卸载完成")

@@ -1,2 +1,121 @@
-<!--pages/user/profile/index.wxml-->
-<text>pages/user/profile/index.wxml</text>
+<wxs module="util">
+  module.exports = {
+    vipExpireTimeFormat:function(userInfo){
+      console.log('userInfo.isVip', userInfo.isVip)
+      console.log('userInfo.vipExpireTime', userInfo.vipExpireTime)
+      if(userInfo.isVip){
+        return userInfo.vipExpireTime.substring(0,10)
+      }
+      return ''
+    },
+    readbooksAmountShow: function(e){
+      var money = e*1
+      if(e < 10000){
+        return Math.floor(e)
+      }
+      return (e/10000).toFixed(2) + '万'
+    }
+  }
+</wxs>
+
+<view class="container" wx:if="{{userInfo}}">
+
+  <view class="pannel-block userinfo-block u-m-t-0">
+    <view class="userinfo u-flex {{userInfo.isVip ? 'vip-user':''}}">
+      <view class="userinfo-avatar shadow" bindtap="login__track">
+        <!-- <open-data class="image" type="userAvatarUrl"></open-data> -->
+        <image class="avatar" mode="aspectFill" src="{{userInfo.avatar || 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132'}}"></image>
+      </view>
+      <view class="userinfo-info u-flex-col">
+        <view class="userinfo-nickname u-flex">
+          <!-- <open-data class="nickname" type="userNickName"></open-data> -->
+          <text class="nickname text-title">{{userInfo.nickname || '微信用户'}}</text>
+          <icon class="userinfo-vipmark {{userInfo.isVip ? '':'unactive'}}"></icon>
+        </view>
+        <view class="userinfo-ext u-m-t-10" wx:if="{{userInfo.isVip}}">
+          <text class="userinfo-expire text-normal color-gray"
+            wx:if="{{userInfo.isVip}}">{{util.vipExpireTimeFormat(userInfo)}} 到期</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="agg-info u-grid u-p-l-0 u-p-r-0"  bindtap="openPage__track" data-url="/pages/user/pages/vipcard/log">
+      <view class="agg-info-item u-flex-col">
+        <text class="text text-large color-gray text-regular">我加入的</text>
+        <view class="u-flex u-col-bottom u-m-t-10">
+          <text class="text text-title" style="height: 42rpx; line-height: 1;">{{userInfo.joinDays||1}}</text>
+          <text class="text text-large u-flex u-col-bottom" style="height:30rpx;line-height: 1;transform: translateY(-4rpx);">天</text>
+        </view>
+      </view>
+
+      <view class="agg-info-item u-flex-col">
+        <text class="text text-large color-gray text-regular">奖励</text>
+        <view class="u-flex u-col-bottom u-m-t-10">
+          <text class="text text-title" style="height: 42rpx; line-height: 1;">{{util.readbooksAmountShow(vipAggInfo.rmbYuan.total_origin_book_price||0)}}</text>
+          <text class="text text-large text-regular u-flex u-col-bottom" style="height:30rpx;line-height: 1; transform: translateY(-4rpx);">积分</text>
+        </view>
+      </view>
+
+    </view>
+
+    <view class="banner u-m-t-40" wx:if="{{cmsInfo.pages_index_user__banner && cmsInfo.pages_index_user__banner.length > 0 }}">
+        <swiper class="banner-wrapper" wx:if="{{ cmsInfo.pages_index_user__banner.length > 1}}">
+          <swiper-item class="banner-item" wx:for="{{cmsInfo.pages_index_user__banner}}" wx:key="pages_index_user__banner">
+            <image class="banner-image" mode="aspectFill" src="{{item.image}}" bindtap="openPage__track" data-url="{{item.open_url}}"></image>
+          </swiper-item>
+        </swiper>
+        <view class="banner-wrapper" wx:else>
+            <view class="banner-item" wx:for="{{cmsInfo.pages_index_user__banner}}" wx:key="pages_index_user__banner">
+              <image class="banner-image" mode="aspectFill" src="{{item.image}}" bindtap="openPage__track" data-url="{{item.open_url}}"></image>
+            </view>
+        </view>
+    </view>
+
+    <!-- <view class="vipcards">
+      <vipcard-list id="cardList" index="{{vipCardActiveIndex}}" bind:clickcard="buycard__track"></vipcard-list>
+    </view> -->
+
+
+
+
+  </view>
+
+
+
+
+
+  <view class="tools pannel-block u-p-t-20 u-p-b-20">
+
+    <view class="cell">
+      <view class="cell-left">
+        <icon class="icon imgicon imgicon-assistant"></icon>
+      </view>
+      <view class="cell-right" wx:if="{{userInfo.avatar}}">
+        <button class="cell-right" open-type="contact" session-from='{"nickName":"{{userInfo.nickname}}","avatarUrl":"{{userInfo.avatar}}","sex":"0","country":"中国","province":"省份","city":"城市"}' hover-class="none" style="height: 48rpx;padding: 0;background-color: transparent!">
+          <text class="cell-title text-title-sub">联系客服</text>
+          <icon class="icon iconfont icon-right text-sm"></icon>
+        </button>
+      </view>
+      <view class="cell-right" wx:else>
+        <button  class="cell-right" bindtap="login__track" data-pos="contact" hover-class="none" style="height: 48rpx;padding: 0;background-color: transparent!">
+          <text class="cell-title text-title-sub">联系客服</text>
+          <icon class="icon iconfont icon-right text-sm"></icon>
+        </button>
+      </view>
+    </view>
+
+
+    <view class="cell" bindtap="openPage__track" data-url="/pages/user/about/index">
+      <view class="cell-left">
+        <icon class="icon imgicon imgicon-question"></icon>
+      </view>
+      <view class="cell-right">
+        <text class="cell-title text-title-sub">关于我们</text>
+        <icon class="icon iconfont icon-right text-sm"></icon>
+      </view>
+    </view>
+
+
+  </view>
+
+</view>

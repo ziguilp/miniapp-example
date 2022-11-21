@@ -2,7 +2,7 @@
 import { IAppOption, Inavigator } from '../typings';
 import store from './store/index';
 // @ts-ignore
-import {} from './utils/number';
+import { } from './utils/number';
 import { appConfig as config } from './config';
 import { EventBus } from './utils/eventbus';
 import util from './utils/util';
@@ -15,16 +15,26 @@ App<IAppOption>({
     timer_env_storage: {},
     store,
     globalData: {},
-    $teaReport: () => {
+    $teaReport: (event:string,data:any) => {
         //埋点数据上报
+        console.log(`埋点数据上报`, {
+            event,
+            data
+        })
     },
-    $sentry:{
-        captureMessage: () => {},
-        captureException: () => {},
-        captureEvent: () => {},
+    $sentry: {
+        captureMessage: (...arg: any) => {
+            console.log(`captureMessage`, arg)
+        },
+        captureException: (...arg: any) => {
+            console.log(`captureException`, arg)
+        },
+        captureEvent: (...arg: any) => {
+            console.log(`captureEvent`, arg)
+        },
     },
-    async onLaunch(options:WechatMiniprogram.App.LaunchShowOption) {
-        console.log('---------onLaunch-----------', options) 
+    async onLaunch(options: WechatMiniprogram.App.LaunchShowOption) {
+        console.log('---------onLaunch-----------', options)
 
         // let {openId,unionId} = await util.getUserOpenIdAndUnionId({force: true})
         // try{
@@ -66,7 +76,7 @@ App<IAppOption>({
             console.error("登录失败", error)
         }
 
-        let systemInfo = wx.getSystemInfoSync()
+        const systemInfo = wx.getSystemInfoSync()
         this.systemInfo = {
             ...systemInfo,
             rpxRate: Number((750 / systemInfo.screenWidth).toFixed(2)),
@@ -99,11 +109,11 @@ App<IAppOption>({
                 })
             }
             const updateManager = wx.getUpdateManager();
-            updateManager.onCheckForUpdate(function (res) {
+            updateManager.onCheckForUpdate((res) => {
                 // 请求完新版本信息的回调
-                //console.log(res.hasUpdate)
+                console.log("请求完新版本信息的回调", res.hasUpdate)
             })
-            updateManager.onUpdateReady(function () {
+            updateManager.onUpdateReady(() => {
                 wx.showModal({
                     title: '更新提示',
                     content: '新版本已经准备好，是否重启小程序？',
@@ -127,17 +137,32 @@ App<IAppOption>({
             console.error(ex)
         }
     },
+    async onShow(options: WechatMiniprogram.App.LaunchShowOption) {
+        // decorator Page Function
+        console.log("--------appOnShow--------", e)
+        const originPage = Page; // Page源对象的引用
+        Page = (pageOption: Record<string,any>) => {
+            Object.keys(pageOption).forEach((methodName) =>{
+                console.log('解析page', methodName, pageOption[methodName])
+                if('function' === typeof pageOption[methodName]){
+                    if(/\_\_track$/.test(methodName)){
+                        const oldFn = pageOption[methodName]
+                        pageOption[methodName] = (...args:any) =>{
+                            this.$teaReport(methodName, args)
+                            oldFn(...args)
+                        }
+                    }
+                }
+            })
+            return originPage(pageOption);
+        };
+    },
     /**
      * 页面未找到时的核心处理方法
      * 默认跳转至首页
-     * 支持参数传递
-     * @obj rules 配置的是指定路由时的重定向目标页面
-     * @rules key目前只支持正则表达式作为未找到路径的匹配方案，并区分大小写
-     * @rules value 支持Object，{path:重定向目标地址【支持字符串和function】,method:跳转方式【微信支持的几种跳转方式，默认为redirectTo，当识别为tab页面时自动使用switchTab】,success:重定向成功后执行的方法}
-     * @rules value 支持String，即等同于{path:value}
-     * @rules value 支持function，需返回重定向目标地址
+     * 规则可在config中配置支持
      */
-    onPageNotFound(e:any) {
+    onPageNotFound(e: WechatMiniprogram.App.PageNotFoundOption) {
         console.warn("-----pageNotFound-----", e)
         let path = `/pages/index/index`,
             method = 'redirectTo',
@@ -150,11 +175,11 @@ App<IAppOption>({
                 }
             }
         }
-        let queryStr:string = query.join("&")
+        const queryStr: string = query.join("&")
         for (const reg in config.appNotFindRules) {
             if (config.appNotFindRules.hasOwnProperty(reg)) {
                 const ele = config.appNotFindRules[reg];
-                let regExp = new RegExp(reg)
+                const regExp = new RegExp(reg)
                 if (regExp.test(e.path)) {
                     if ('object' == typeof ele) {
                         if (ele.hasOwnProperty("method") && ['redirectTo', 'navigatorTo', 'switchTab'].indexOf(ele.method)) {
@@ -185,16 +210,16 @@ App<IAppOption>({
         path,
         method = "redirectTo",
         success
-    }:Inavigator) {
+    }: Inavigator) {
         // @ts-ignore
         wx[method].call(this, {
             url: path
-        }).then((e:any) => {
+        }).then(() => {
             success && success.call(this)
-        }).catch((e:any) => {
+        }).catch((e: any) => {
             console.error(e)
             try {
-                let err = e instanceof Error ? e.message : (typeof e == 'object' ? (JSON.stringify(e)) : e)
+                const err = e instanceof Error ? e.message : (typeof e == 'object' ? (JSON.stringify(e)) : e)
                 if (/tab\s?bar\s?page/.test(err)) {
                     wx.switchTab({
                         url: path,
@@ -219,7 +244,7 @@ App<IAppOption>({
      * @param options 
      * @param isAppOnLanch 
      */
-    async sceneReport(options:any, isAppOnLanch = false) {
+    async sceneReport(options: WechatMiniprogram.App.LaunchShowOption, isAppOnLanch = false) {
         // 从分享或者扫码进来的
         if (options && Object.keys(options).length) {
             let query = options.query || {};
@@ -232,7 +257,7 @@ App<IAppOption>({
             }
             // 为什么
             // if (isAppOnLanch) return true;
-            let current_etc:any = null;
+            let current_etc: any = null;
             if (uuid) {
                 //如果未登录尝试登录
                 if (util.getUserId()) {
@@ -244,7 +269,7 @@ App<IAppOption>({
                 } else {
                     //延迟上报
                     console.log(`场景延迟上报`)
-                    setTimeout((e:any) => {
+                    setTimeout((e: any) => {
                         sceneApi.reportScene({
                             options,
                             scene: uuid
@@ -255,13 +280,13 @@ App<IAppOption>({
                 //查询二维码渠道信息
                 const {
                     etc
-                }:any = uuid ? await sceneApi.getSceneInfo({
+                }: any = uuid ? await sceneApi.getSceneInfo({
                     uuid
                 }) : { etc: null };
                 current_etc = etc;
             }
             console.log("-----current_etc-----", current_etc)
-     
+
 
             try {
                 if (current_etc && current_etc.type == 'simulation' && current_etc.access_token) {
@@ -271,7 +296,7 @@ App<IAppOption>({
                         success: (c) => {
                             if (c.confirm) {
                                 getApp<IAppOption>().setToken(current_etc.access_token)
-                                setTimeout(e => {
+                                setTimeout(() => {
                                     wx.switchTab({
                                         url: `/pages/index/index`,
                                     })
@@ -302,14 +327,14 @@ App<IAppOption>({
             }
         }
     },
-     /**
-     * 扫码进入的数据
-     */
-    parseScanUri(options:any) {
+    /**
+    * 扫码进入的数据
+    */
+    parseScanUri(options: WechatMiniprogram.App.LaunchShowOption) {
         if (options && options.hasOwnProperty('q')) {
             // 拦截扫码进入的数据
             try {
-                 
+
             } catch (error) {
                 console.error(error)
             }

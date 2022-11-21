@@ -146,7 +146,8 @@ Component({
          * 读取弹窗区域
          * @param {*} e 
          */
-        async getQuery(selector: any) {
+        async getQuery(selectorStr: any) {
+            let selector = selectorStr;
             if (!selector && this.data.customId) {
                 selector = `#${this.data.customId}`;
             }

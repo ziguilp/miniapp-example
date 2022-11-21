@@ -1,0 +1,59 @@
+/* pages/user/about/qa.wxss */
+container {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.user-questions {
+    margin-top: 22rpx;
+    background-color: #fff;
+    padding: 20rpx 46rpx;
+}
+
+.qes-li {
+    padding: 20rpx 0;
+    border-top: 1rpx solid #e5e5e5;
+}
+
+.qes-li:nth-child(1) {
+    border: none;
+}
+
+.qes-title-1 {
+    font-size: 34rpx;
+    color: #030303;
+    line-height: 1.75;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qes-ans {
+    line-height: 1.75;
+    font-size: 28rpx;
+    color: #4a4a4a;
+}
+
+.icon-gengduo- {
+    font-size: 20rpx;
+}
+
+.cart-submit-view {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 46rpx;
+    font-size: 34rpx;
+    z-index: 99;
+    bottom: calc(env(safe-area-inset-bottom) + 24rpx);
+}
+
+.cart-submit-button {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.link-text {
+    color: blue;
+}
