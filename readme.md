@@ -95,3 +95,14 @@ console.log(`请求结果`, res)
 - 如需关闭eslint校验，在项目设置中关闭自定义预处理
 
 
+### 8、支持埋点数据上报至we分析【需配置事件】
+- APP和Page生命周期函数自动埋点
+- Page其他函数埋点方法名需为xx__track格式
+```
+#示例
+async clickClose__track(){
+    
+}
+```
+
+

@@ -99,7 +99,7 @@ class TrackReport {
     public queue!: TurboTrackQueueItem[];
     public timerId: any = null;
     public config!: Record<string, TurboTrackWechatEventItem>;
-    public systemInfo!:SystemInfo;
+    public systemInfo!: SystemInfo;
 
     constructor() {
         // 需要发送的追踪信息的队列
@@ -113,14 +113,36 @@ class TrackReport {
      */
     _flush() {
         // 队列中有数据时进行请求
-        if(!this.systemInfo){
+        if (!this.systemInfo) {
             this.systemInfo = getApp<IAppOption>().systemInfo as SystemInfo;
         }
+
+
         if (this.queue.length > 0) {
             const data = this.queue.shift();
             if (!data) return;
             try {
-                wx.reportEvent(data.wxEventName, data?.data)
+                const eventName = data.wxEventName;
+                const opts = data.data;
+                const eventConfig = this.config
+                if (eventConfig.hasOwnProperty(eventName)) {
+                    console.log(`事件${eventName}可以上报到we分析`)
+                    const wxEv = eventConfig[eventName]
+                    let p: any = {};
+                    for (const key in wxEv.param) {
+                        const ele = wxEv.param[key]
+                        if (opts.hasOwnProperty(key)) {
+                            p[key] = ele.type(opts[key])
+                        } else {
+                            p[key] = ele.default
+                        }
+                    }
+                    console.log(`事件${eventName}上报到we分析`, p)
+                    wx.reportEvent(data.wxEventName, p)
+                }
+               
+                // 这里上报到其他平台
+                
             } catch (error) {
 
             } finally {
@@ -139,35 +161,15 @@ export const report = (eventName: string, opts: Record<string, any> = {}) => {
 
     console.log(`事件${eventName}请求上报`, opts)
 
-    let eventConfig = eventConf
-    if (eventConfig.hasOwnProperty(eventName)) {
-        console.log(`事件${eventName}可以上报到we分析`)
-        const wxEv = eventConfig[eventName]
-        let p: any = {};
-        for (const key in wxEv.param) {
-            const ele = wxEv.param[key]
-            if (opts.hasOwnProperty(key)) {
-                p[key] = ele.type(opts[key])
-            } else {
-                p[key] = ele.default
-            }
-        }
-        console.log(`事件${eventName}上报到we分析`, p)
-        // wx.reportEvent(wxEv.wxEventName, p)
+    tr.queue.push({
+        wxEventName: eventName,
+        data: opts
+    } as TurboTrackQueueItem)
 
-        tr.queue.push({
-            wxEventName: wxEv.wxEventName,
-            data: {
-                ...p,
-                systemInfo: tr.systemInfo
-            }
-        } as TurboTrackQueueItem)
-
-        if (!tr.timerId) {
-            // 为了不影响正常的业务请求，这里延时发出我们的埋点信息
-            tr.timerId = setTimeout(() => {
-                tr._flush();
-            }, 100);
-        }
+    if (!tr.timerId) {
+        // 为了不影响正常的业务请求，这里延时发出我们的埋点信息
+        tr.timerId = setTimeout(() => {
+            tr._flush();
+        }, 100);
     }
 }
