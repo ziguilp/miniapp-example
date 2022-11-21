@@ -8,6 +8,10 @@ import { EventBus } from './utils/eventbus';
 import util from './utils/util';
 import sceneApi from './api/scene.api';
 import { login } from './utils/http';
+import TurboTracker from './vendor/xbossTrack/index';
+import { report as  TurboReport} from './vendor/track/report';
+
+new TurboTracker({ tracks: [], isUsingPlugin:false }, TurboReport);
 
 App<IAppOption>({
     storage: {},
@@ -15,13 +19,7 @@ App<IAppOption>({
     timer_env_storage: {},
     store,
     globalData: {},
-    $teaReport: (event:string,data:any) => {
-        //埋点数据上报
-        console.log(`埋点数据上报`, {
-            event,
-            data
-        })
-    },
+    $teaReport: TurboReport,
     $sentry: {
         captureMessage: (...arg: any) => {
             console.log(`captureMessage`, arg)
@@ -139,23 +137,8 @@ App<IAppOption>({
     },
     async onShow(options: WechatMiniprogram.App.LaunchShowOption) {
         // decorator Page Function
-        console.log("--------appOnShow--------", e)
-        const originPage = Page; // Page源对象的引用
-        Page = (pageOption: Record<string,any>) => {
-            Object.keys(pageOption).forEach((methodName) =>{
-                console.log('解析page', methodName, pageOption[methodName])
-                if('function' === typeof pageOption[methodName]){
-                    if(/\_\_track$/.test(methodName)){
-                        const oldFn = pageOption[methodName]
-                        pageOption[methodName] = (...args:any) =>{
-                            this.$teaReport(methodName, args)
-                            oldFn(...args)
-                        }
-                    }
-                }
-            })
-            return originPage(pageOption);
-        };
+        console.log("--------appOnShow--------", options)
+     
     },
     /**
      * 页面未找到时的核心处理方法

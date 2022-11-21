@@ -10,9 +10,11 @@
     "license": "MIT",
     "dependencies": {
         "@vant/weapp": "^1.10.7",
-        "dayjs": "^1.11.6"
+        "dayjs": "^1.11.6",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
+        "@types/uuid": "^8.3.4",
         "@typescript-eslint/eslint-plugin": "^5.43.0",
         "@typescript-eslint/parser": "^5.43.0",
         "eslint": "^8.28.0",

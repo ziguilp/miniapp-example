@@ -13,7 +13,7 @@
     <view class="usermotto u-flex-col u-row-center u-col-center u-m-t-80"> 
 
         <button bindtap="confirm">Confirm确认示例</button>
-        <button bindtap="testReq">网络调用示例</button>
+        <button bindtap="testReq__track">网络调用示例</button>
         <button bindtap="toCustom">自定义导航页面实例</button>
 
         <!-- 弹窗示例 -->

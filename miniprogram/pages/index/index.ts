@@ -35,7 +35,7 @@ Page({
         }
 
     },
-    async testReq() {
+    async testReq__track() {
         const res = await httpRequest({
             url: `http://ip.json-json.com/`
         });
