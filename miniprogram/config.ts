@@ -17,7 +17,7 @@ export const appConfig: AppConfigProp = {
         return this[this.env]['graphql']
     },
     dev: {
-        host: 'https://api.test.com',
+        host: 'http://127.0.0.1:3000',
         posterHost: "http://192.168.31.81:3000",
         shortLinkApiKey: "5a63fe928ea2a67785840c3b6d1603",
         graphql: {

@@ -4,6 +4,7 @@ import util, { buildLocalUserInfo, TurboModal } from './util';
 
 const fly = Fly()
 fly.config.baseURL = config.host;
+
 fly.interceptors.request.use((request: FlyRequestConfig) => {
     console.log('[request]', request)
     if (typeof request.withoutToken == 'undefined' || request.withoutToken === false) {
@@ -14,12 +15,27 @@ fly.interceptors.request.use((request: FlyRequestConfig) => {
     } else {
         console.log(`不需要token`)
     }
+
+    // 导航部显示加载
+    wx.showNavigationBarLoading()
+
+    const loaidngStr: string = request.showLoading ? (request.showLoading === true ? '加载中...' : request.showLoading) : '';
+    if (loaidngStr) {
+        wx.showLoading({
+            title: loaidngStr
+        })
+    }
     return request
 })
 
 fly.interceptors.response.use(
     async (response: FlyResponse) => {
         wx.stopPullDownRefresh()
+        wx.hideNavigationBarLoading()
+        if (response.request.showLoading) {
+            wx.hideLoading()
+        }
+
         console.log('【RESPONCE】', response)
         try {
             const { request } = response;
@@ -83,7 +99,7 @@ fly.interceptors.response.use(
                 const result = await login();
                 if (result) {
                     //console.log('静默登录成功')
-                    return fly.request(request||{}) 
+                    return fly.request(request || {})
                 } else {
                     redirectLogin();
                     return Promise.reject('未登录')
@@ -136,11 +152,11 @@ fly.interceptors.response.use(
  * @param {*} query  //Object类型，请求带的query的参数
  * @param {*} mustAuth 该页面是否引导授权
  */
-export const httpRequest = (requestParam: TurboRequestParam):Promise<FlyPromise<any>> => {
+export const httpRequest = (requestParam: TurboRequestParam): Promise<FlyPromise<any>> => {
     const { url, method = 'GET', data = {}, mustAuth, options = {} } = requestParam;
     const token = util.getUserToken();
     if (mustAuth && !token) {
-        wx.navigateTo({ url: '/pages/user/pages/login/index' });
+        wx.navigateTo({ url: '/pages/user/login/index' });
         return Promise.reject('暂未登录')
     }
     // @ts-ignore
@@ -156,7 +172,7 @@ export const redirectLogin = () => {
     redirectLoginModal = true;
     return TurboModal({ title: '提示：您还没有登录', content: '登录后，方可以使用全部功能' }).then(() => {
         redirectLoginModal = false
-        wx.navigateTo({ url: '/pages/user/pages/login/index' });
+        wx.navigateTo({ url: '/pages/user/login/index' });
     }).catch(() => {
         redirectLoginModal = false
         return; // 拒绝跳转,则不作任何处理，只是把reject传递出去。
@@ -169,7 +185,7 @@ loginFly.config.baseURL = config.host;
  * 自动登录
  */
 export const login = async (opt?: WechatMiniprogram.App.LaunchShowOption) => {
-    const options = opt|| {} as WechatMiniprogram.App.LaunchShowOption;
+    const options = opt || {} as WechatMiniprogram.App.LaunchShowOption;
     const query = options.query || {}
     const scene = query.scene || options.scene || '';
     const uuid = (scene.length === 32 || scene.length === 36) ? scene : ''; //uuid

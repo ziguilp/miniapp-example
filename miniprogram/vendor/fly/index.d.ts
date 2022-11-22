@@ -16,6 +16,7 @@ export interface FlyRequestConfig extends Object {
     timeout?: number;
     withCredentials?: boolean;
     parseJson?: boolean;
+    showLoading?: boolean | string;
     responseType?: string;
     showErrorMsg?: boolean;
     withoutToken?: boolean;
@@ -46,7 +47,7 @@ export interface FlyErrResponse {
 }
 
 export interface FlyPromise<T = any> extends Promise<FlyResponse<T>> {
-    
+
 }
 
 export interface FlyRequestInterceptor<V> {
@@ -59,7 +60,6 @@ export interface FlyResponseInterceptor<V> {
     use(onSucceed?: (response: V) => any, onError?: (err: FlyError) => any): void;
     lock(): void;
     unlock(): void;
-
     clear(): void;
 }
 

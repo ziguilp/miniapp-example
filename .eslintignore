@@ -1,5 +1,6 @@
 node_modules
 miniprogram/miniprogram_npm
 miniprogram/vendor/track
+miniprogram/utils/debounce-throttle.ts
 typings
 *.d.ts

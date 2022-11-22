@@ -11,10 +11,13 @@
 
 
     <view class="usermotto u-flex-col u-row-center u-col-center u-m-t-80"> 
+        <button class="btn round u-m-b-20 u-w-full" bindtap="confirm">Confirm确认示例</button>
+        <button class="btn round u-m-b-20 u-w-full"  bindtap="testReq__track">网络调用示例</button>
+        <button class="btn round u-m-b-20 u-w-full"  bindtap="toCustom">自定义导航页面实例</button>
+        <button class="btn round u-m-b-20 u-w-full"  bindtap="debounce">防抖点击示例</button>
+        <button class="btn round u-m-b-20 u-w-full"  bindtap="throttle">节流点击示例</button>
 
-        <button bindtap="confirm">Confirm确认示例</button>
-        <button bindtap="testReq__track">网络调用示例</button>
-        <button bindtap="toCustom">自定义导航页面实例</button>
+        <button class="btn round u-m-b-20 u-w-full"  bindtap="upload">上传</button>
 
         <!-- 弹窗示例 -->
         <turbo-modal label="唤起弹窗示例" show="{{false}}" showClose="{{true}}" showBgImg="{{false}}" title="公告">

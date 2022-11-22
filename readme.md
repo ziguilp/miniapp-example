@@ -99,12 +99,31 @@
 
     ```
 
+- ### 支持阿里云OSS和七牛云直传
 
-- ### 已经开启eslint
-    - 默认开启eslint校验
-    - 每次编译前均检测是否有错误，如果有错误无法完成编译
-    - 如有错误，请根据控制台错误信息改正
-    - 如需关闭eslint校验，在项目设置中关闭自定义预处理
+    ```javascript
+     /**
+     * 上传
+     */
+    upload: new DebounceThrottle({
+        fn: async function(){
+            const res  = await wx.chooseMedia({
+                count: 1,
+                mediaType: ['image','video'],
+                sourceType: ['album', 'camera'],
+                maxDuration: 30,
+                camera: 'back',
+            })
+            
+            if(res.tempFiles.length == 1){
+                const image = await uploader.upload(res.tempFiles[0].tempFilePath, (process) => {
+                    console.log(`上传进度`, process)
+                }, 'qiniu').catch(console.error)
+                console.log(`上传结果`, image)
+            }
+        }
+    })._throttle(),
+    ```
 
 - ### 支持埋点[可通过配置上报we分析]
     - Page生命周期函数已经自动埋点
@@ -139,4 +158,8 @@
         }
         ```
 
-
+- ### 已经开启eslint
+    - 默认开启eslint校验
+    - 每次编译前均检测是否有错误，如果有错误无法完成编译
+    - 如有错误，请根据控制台错误信息改正
+    - 如需关闭eslint校验，在项目设置中关闭自定义预处理
