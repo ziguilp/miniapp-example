@@ -10,8 +10,7 @@
     "license": "MIT",
     "dependencies": {
         "@vant/weapp": "^1.10.7",
-        "dayjs": "^1.11.6",
-        "uuid": "^9.0.0"
+        "dayjs": "^1.11.6"
     },
     "devDependencies": {
         "@types/uuid": "^8.3.4",

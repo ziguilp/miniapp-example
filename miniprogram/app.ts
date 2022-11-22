@@ -9,9 +9,9 @@ import util from './utils/util';
 import sceneApi from './api/scene.api';
 import { login } from './utils/http';
 import TurboTracker from './vendor/xbossTrack/index';
-import { report as  TurboReport} from './vendor/track/report';
+import { tr, report} from './vendor/track/report';
 
-new TurboTracker({ tracks: [], isUsingPlugin:false }, TurboReport);
+new TurboTracker({ tracks: [], isUsingPlugin:false }, report);
 
 App<IAppOption>({
     storage: {},
@@ -19,7 +19,7 @@ App<IAppOption>({
     timer_env_storage: {},
     store,
     globalData: {},
-    $teaReport: TurboReport,
+    $teaReport: report,
     $sentry: {
         captureMessage: (...arg: any) => {
             console.log(`captureMessage`, arg)
@@ -38,7 +38,7 @@ App<IAppOption>({
         // try{
         //   let reportData = {}
         //   if(openId){ 
-        //     tea.config({ user_unique_id: openId})
+        //     tr.setOpenId(openId)
         //     // sentry.configureScope(scope => {
         //     //   scope.setUser({ openId, unionId });
         //     // });
@@ -69,7 +69,10 @@ App<IAppOption>({
 
         try {
             //code登录、注册一体
-            await login(options);
+            const user = await login(options);
+            if(user){
+                tr.setOpenId(user.userId)
+            }
         } catch (error) {
             console.error("登录失败", error)
         }
@@ -89,7 +92,7 @@ App<IAppOption>({
         }
 
         try {
-            // 渠道和来源数据上报
+            // 场景码数据上报
             this.sceneReport(options, true);
         } catch (error) {
             console.error(error)

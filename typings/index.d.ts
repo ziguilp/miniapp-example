@@ -6,7 +6,7 @@ import { Store } from "../miniprogram/utils/store";
 /**
  * 通用函数
  */
-export type TurboFn = (...args:any) => void;
+export type TurboFn = (...args: any) => void;
 
 export interface IUserInfo extends WechatMiniprogram.UserInfo {
     id: string,
@@ -50,7 +50,7 @@ export interface IAppOption {
     systemInfo?: SystemInfo,
     userInfoReadyCallback?: WechatMiniprogram.GetUserInfoSuccessCallback,
     $sentry: any,
-    $teaReport(event: string, data: any): void,
+    $teaReport(event: string, data: Record<string, any>): void,
     navigator(opt: Inavigator): void,
     parseScanUri(options: WechatMiniprogram.App.LaunchShowOption): void,
     sceneReport(options: WechatMiniprogram.App.LaunchShowOption, isAppOnLanch: boolean): void,
@@ -66,7 +66,7 @@ export interface IAppOption {
     clearEnvStorageSync(): void,
 }
 
-export interface AppConfigHostConfig{
+export interface AppConfigHostConfig {
     /**
      * 接口服务
      */
@@ -99,12 +99,12 @@ export interface AppConfigProp {
     /**
      * CMS客户端版本号
      */
-    cmsVersion:string,
+    cmsVersion: string,
     /**
      * 路由未找到时处理规则
      */
     appNotFindRules: {
-        [key:string]: any
+        [key: string]: any
     },
     /**
      * 开发环境
@@ -123,13 +123,13 @@ export interface AppConfigProp {
      */
     share: {
         title: string,
-        image?:string
+        image?: string
     },
     /**
      * H5连接配置
      */
     h5Url: {
-        [key:string]: string
+        [key: string]: string
     },
-    [key:string]: any
+    [key: string]: any
 }
