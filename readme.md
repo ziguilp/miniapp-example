@@ -125,6 +125,111 @@
     })._throttle(),
     ```
 
+- ### 内置了FormUtil通用[可以辅助构造表单页面]
+    ```typescript
+    // pages/index.ts
+
+    // 内置了字段赋值，上传、扫码等
+    import formUtil from "../../utils/formUtil" 
+
+    // 获取应用实例
+    const app = getApp<IAppOption>()
+
+    Page({
+        ...formUtil,
+        data: {
+            form: {
+                name: '',
+                image: '',
+                intro: '',
+                province: '',
+                city: '',
+                area: '',
+                qualifications: [],
+            },
+            canSave: false,
+            ec2:  {
+                InstanceId: '',
+            } as Ec2BaseInfo
+        },
+        /**
+         * 校验数据格式
+        */
+        checkCanISave() {
+            const { form } = this.data;
+            if (/^[a-z0-9|\-]{10,32}$/i.test(form.name)) {
+                this.setData({
+                    canSave: true
+                })
+                return true
+            }
+            
+            this.setData({
+                canSave: false
+            })
+            return '请输入实例ID'
+        },
+    })
+    ```
+
+    ```html
+    <!-- pages/index.wxml -->
+       <view class="container u-flex-col u-p-t-40">
+        <text class="text-xlarge color-gray">基本信息</text>
+        <view class="pannel-block  u-p-t-0 u-p-b-0">
+            <view class="profile-cell u-flex u-row-between u-col-center">
+                <text class="text-nm color-gray">名称</text>
+                <view class="u-flex u-col-center">
+                    <input data-field="name" value="{{form.name}}" bindinput="onInput"></input>
+                    <icon class="icon iconfont icon-you color-gray u-m-l-25"></icon>
+                </view>
+            </view>
+            <view class="profile-cell u-flex u-row-between u-col-center" bindtap="chooseImage" data-field="image">
+                <text class="text-nm color-gray">头像</text>
+                <view class="u-flex u-col-center" >
+                    <image class="avatar circle" src="{{form.image}}"></image>
+                </view>
+            </view>
+            <view class="profile-cell u-flex u-row-between u-col-center">
+                <text class="text-nm color-gray">简介</text>
+                <view class="u-flex u-col-center">
+                    <textarea data-field="intro" value="{{form.intro}}" bindinput="onInput" auto-height></textarea>
+                    <icon class="icon iconfont icon-you color-gray u-m-l-25"></icon>
+                </view>
+            </view>
+            <view class="profile-cell u-flex u-row-between u-col-center">
+                <text class="text-nm color-gray">所在地</text>
+                <picker mode="region" level="city" bindchange="onInput" data-field="location">
+                    <view class="u-flex u-col-center">
+                        <text>{{form.province}}{{form.city}}{{form.area}}</text>
+                        <icon class="icon iconfont icon-you color-gray u-m-l-25"></icon>
+                    </view>
+                </picker>
+            </view> 
+
+
+            <view class="profile-cell u-flex u-row-between u-col-center">
+                <text class="text-nm color-gray">联系电话</text>
+                <view class="u-flex u-col-center">
+                    <input data-field="mobile" value="{{form.mobile}}" bindinput="onInput"></input>
+                    <icon class="icon iconfont icon-you color-gray u-m-l-25"></icon>
+                </view>
+            </view>
+
+            <view class="profile-cell u-flex u-row-between u-col-center" bindtap="chooseImage" data-field="qualifications" data-water="water_check" data-count="9">
+                <text class="text-nm color-gray">营业执照&资质</text>
+                <view class="u-flex u-col-center">
+                    <image class="avatar" wx:if="{{!form.qualifications || form.qualifications.length == 0}}"></image>
+                    <image class="avatar" wx:for="{{form.qualifications}}" wx:key="qualifications" catchtap="privewImage" src="{{item}}" data-imgs="{{form.qualifications}}" data-url="{{item}}" bindlongtap="delImage" data-field="qualifications" data-index="{{index}}" ></image>
+                </view>
+            </view>
+        </view>
+        
+        <button wx:if="{{cansave}}" bindtap="submit" class="btn u-m-t-40 save-profile">提交</button>
+        <button wx:else class="btn u-m-t-40 save-profile disabled" bindtap="submit">提交</button>
+    </view>
+    ```
+
 - ### 支持埋点[可通过配置上报we分析]
     - Page生命周期函数已经自动埋点
     - Page其他函数埋点方法名需为xx__track格式
