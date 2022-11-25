@@ -1,0 +1,9 @@
+<!--components/form/captcha.wxml-->
+<view class="profile-cell u-flex u-row-between u-col-center">
+    <text class="text-nm color-gray">验证码</text>
+    <view class="u-flex u-col-center">
+        <slot></slot>
+        <button class="btn btn-sm u-m-l-10 disabled" wx:if="{{cutdown > 0}}">{{cutdown}}s</button>
+        <button class="btn btn-sm u-m-l-10" bindtap="sendCode" wx:else>发送验证码</button>
+    </view>
+</view>
