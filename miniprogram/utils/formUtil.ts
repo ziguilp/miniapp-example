@@ -125,7 +125,7 @@ export default {
         // @ts-ignore
         this.setData({
             // @ts-ignore
-            [`form.${field}`]: imgs.filter(e => e != url)
+            [`form.${field}`]: imgs.filter((e) => e != url)
         })
         // @ts-ignore
         if (typeof this.checkCanISave === 'function') this.checkCanISave()
