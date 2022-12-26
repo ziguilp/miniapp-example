@@ -2,16 +2,16 @@
 import { IAppOption, Inavigator } from '../typings';
 import store from './store/index';
 // @ts-ignore
-import { } from './utils/number';
+import 'turbo-number';
 import { appConfig as config } from './config';
 import { EventBus } from './utils/eventbus';
 import util from './utils/util';
 import sceneApi from './api/scene.api';
 import { login } from './utils/http';
 import TurboTracker from './vendor/xbossTrack/index';
-import { tr, report} from './vendor/track/report';
+import { tr, report } from './vendor/track/report';
 
-new TurboTracker({ tracks: [], isUsingPlugin:false }, report);
+new TurboTracker({ tracks: [], isUsingPlugin: false }, report);
 
 App<IAppOption>({
     storage: {},
@@ -70,7 +70,7 @@ App<IAppOption>({
         try {
             //code登录、注册一体
             const user = await login(options);
-            if(user){
+            if (user) {
                 tr.setOpenId(user.userId)
             }
         } catch (error) {
@@ -141,7 +141,7 @@ App<IAppOption>({
     async onShow(options: WechatMiniprogram.App.LaunchShowOption) {
         // decorator Page Function
         console.log("--------appOnShow--------", options)
-     
+
     },
     /**
      * 页面未找到时的核心处理方法

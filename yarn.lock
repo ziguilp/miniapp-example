@@ -903,6 +903,11 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
+turbo-number@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/turbo-number/-/turbo-number-1.0.1.tgz#d514a2aef51a61c0a596cedcaac97b5c9bc3c45f"
+  integrity sha512-hf70S0glAWcC4FAldp5WoLhruptcvrddLHTT6QYujGFbK36aHWkEv2JHVp6zGQPj39axJhmWYZaXuAlmSWSQ0g==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.npmmirror.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"

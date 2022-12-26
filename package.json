@@ -12,7 +12,8 @@
         "@vant/weapp": "^1.10.7",
         "crypto-js": "^4.1.1",
         "dayjs": "^1.11.6",
-        "js-base64": "^3.7.3"
+        "js-base64": "^3.7.3",
+        "turbo-number": "^1.0.1"
     },
     "devDependencies": {
         "@types/crypto-js": "^4.1.1",
