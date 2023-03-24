@@ -208,7 +208,10 @@ export const login = async (opt?: WechatMiniprogram.App.LaunchShowOption) => {
     }).catch(console.error)
     if (res && res.status == 200) {
         const userInfoRes = res.data.data.userInfo
-        const userInfo = buildLocalUserInfo(userInfoRes)
+        const userInfo = buildLocalUserInfo({
+            ... userInfoRes,
+            access_token: res.data.data.access_token
+        })
         fly.unlock()
         return userInfo
     }
