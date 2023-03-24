@@ -3,6 +3,29 @@ import jwtDecode from '../vendor/jwt-decode';
 import { IAppOption, IUserInfo, TurboFn } from '../../typings';
 import { login } from './http';
 
+/**
+ * 是否为空：null、undefined、''、'  '、{},[],Nan 都返回true
+ * @param obj 
+ */
+export const isEmpty = (obj:any) => {
+    if(typeof obj === 'number' && obj === NaN){
+        return true;
+    }
+    if(typeof obj != 'number' && !obj){
+        return true;
+    }
+    if(typeof obj === 'string'){
+        return obj.replace(/\s/g,'') === '';
+    }
+    if(obj instanceof Array && obj.length == 0) {
+        return true;
+    }
+    if(typeof obj === 'object'){
+        return Object.keys(obj).length === 0; 
+    }
+    return false;
+}
+
 export const Log = () => {
     const log = wx.getRealtimeLogManager ? wx.getRealtimeLogManager() : null
     return {
@@ -726,10 +749,12 @@ export const buildLocalUserInfo = (userInfoRes: IUserInfo) => {
         joinDays: Math.ceil((dayjs().unix() - dayjs(userInfoRes.date_created).unix()) / 86400),
         birthday: dayjs(userInfoRes.birthday || ``).format(`YYYY-MM-DD`)
     }
+    console.log(`buildUserinfo`, userInfoRes)
     if (userInfoRes.access_token) {
         userInfo.access_token = userInfoRes.access_token;
         userInfo.refresh_token = userInfoRes.access_token;
         const jwtToken = jwtDecode(userInfo.access_token)
+        console.log(`jwtToken`, jwtToken)
         if (jwtToken) {
             userInfo.expires_time = jwtToken.exp
         }
@@ -738,6 +763,67 @@ export const buildLocalUserInfo = (userInfoRes: IUserInfo) => {
     app.setEnvStorageSync("userInfo", app.globalData.userInfo)
     app.store.dispatch('setUserInfo', app.globalData.userInfo)
     return app.globalData.userInfo
+}
+
+/**
+ * 因为安全原因 svg 需转译以便作为背景图使用，也可直接在浏览器中打开
+ * 因为要保留 xvg 可读性，所以使用自定义方法进行转义
+ */
+export const svgToUrl = (str:string) => {
+    return `data:image/svg+xml,${str
+        .replace(/\n/g, '')
+        .replace(/<!--(.*)-->/g, '') // 必须去掉注释
+        .replace(/[\r\n]/g, ' ') // 最好去掉换行
+        .replace(/"/g, "'") // 单引号是保留字符，双引号改成单引号减少编码
+        .replace(/%/g, '%25')
+        .replace(/&/g, '%26')
+        .replace(/#/g, '%23')
+        .replace(/{/g, '%7B')
+        .replace(/}/g, '%7D')
+        .replace(/</g, '%3C')
+        .replace(/>/g, '%3E')}`;
+};
+/**
+ * 生成 svg 字符串
+ * @param {object} options 参数
+ * text 水印文字
+ * <text> 属性（x y transform） 方向位置按需调整
+ * <svg> 中fill属性决定字体颜色
+ */
+export const getCanvasUrl = (options:any, user?:IUserInfo) => {
+    const {
+        text = `${new Date().toLocaleDateString()} ${user?.nickname || ''}`,
+        width = 187.5,
+        height = 112.5,
+        fontSize = 16,
+        color = 'rgb(128,128,128)',
+        fontFamily = 'inherit',
+    } = options || {};
+    return `<svg
+     width="${width}"
+     height="${height}"
+     fill="${color}"
+     xmlns="http://www.w3.org/2000/svg"
+   >
+     <text
+       x="65%"
+       y="55%"
+       transform="rotate(-31, 100 100)"
+       font-size="${fontSize}"
+       font-family="${fontFamily}"
+       text-anchor="middle"
+       dominant-baseline="middle"
+     >${text}</text>
+     <text
+     x="65%"
+     y="55%"
+     transform="rotate(-31, 140 100)"
+     font-size="13"
+     font-family="${fontFamily}"
+     text-anchor="middle"
+     dominant-baseline="middle"
+   >${user?.id || ''}</text>
+   </svg>`;
 }
 
 
@@ -772,4 +858,7 @@ export default {
     toLogisticsDetail,
     objectDiff,
     buildLocalUserInfo,
+    isEmpty,
+    svgToUrl,
+    getCanvasUrl,
 }
