@@ -1,3 +1,13 @@
+/*
+ * @Author        : turbo 664120459@qq.com
+ * @Date          : 2022-11-22 15:03:03
+ * @LastEditors   : turbo 664120459@qq.com
+ * @LastEditTime  : 2023-03-25 15:31:40
+ * @FilePath      : /miniprogram/miniprogram/vendor/upload/index.ts
+ * @Description   : 
+ * 
+ * Copyright (c) 2023 by turbo 664120459@qq.com, All Rights Reserved. 
+ */
 import { QiniuUploader } from './qiniu';
 import crypto from 'crypto-js';
 import {
@@ -102,7 +112,7 @@ export default {
 
             qiniu.upload(filePath, (res) => {
                 console.log('upload success: ', res)
-                resolve(res.imageURL.replace(/^(https?\:\/\/https?\:\/\/)/,'https://'))
+                resolve(res.imageURL.replace(/^(https?\:\/\/https?\:\/\/)/, 'https://'))
             }, (error) => {
                 console.error('upload error: ', error);
                 reject(error)
@@ -150,6 +160,42 @@ export default {
             bucket,
             region,
             domain,
+            AccessKeyId,
+            AccessKeySecret,
+            SecurityToken,
+            expires: date.getTime()
         }
+    },
+    /**
+     * 阿里云私有bucket的STS授权访问
+     * https://help.aliyun.com/document_detail/100670.htm?spm=a2c4g.11186623.0.0.5555180fCZKybI#concept-xqh-2df-xdb
+     * @param url 
+     * @param ossProcess 
+     */
+    async buildAliPrivateImageUrl(url: string, ossProcess?: string) {
+        url = (url || '').replace(/(\https?\:\/\/[^\/^\?]+)\/([^\?]+).*?$/, '$2');
+        if (url.startsWith("/")) url = url.substring(1);
+
+        const app: any = getApp();
+        let aliOssAccess = app.globalData.aliOssAccess || null;
+        if (!aliOssAccess || aliOssAccess.expires < (new Date()).getTime() - 120000) {
+            aliOssAccess = await this.getAliFormData()
+            app.globalData.aliOssAccess = aliOssAccess
+        }
+
+        let signStr = `${url}?security-token=${(aliOssAccess.SecurityToken)}`
+        url += `?security-token=${encodeURIComponent(aliOssAccess.SecurityToken)}`
+        if (ossProcess) {
+            url += `&x-oss-process=${ossProcess}`
+            signStr += `&x-oss-process=${ossProcess}`
+        }
+
+        // 构建签名
+        const expires = parseInt((((new Date()).getTime()) / 1000) as any) + 300;
+        const canonicalString = 'GET\n' + '\n' + '\n' + expires + '\n' + `/${aliOssAccess.bucket}/${signStr}`;
+
+        const signature = crypto.enc.Base64.stringify(crypto.HmacSHA1(canonicalString, aliOssAccess.AccessKeySecret))
+
+        return `https://${aliOssAccess.domain.replace(/^(https?\:\/\/)/, '')}/${url}&OSSAccessKeyId=${aliOssAccess.AccessKeyId}&Expires=${expires}&Signature=${encodeURIComponent(signature)}`
     }
 }
