@@ -203,17 +203,23 @@ export const login = async (opt?: WechatMiniprogram.App.LaunchShowOption) => {
     } catch (error) {
 
     }
-    const res = await loginFly.get({
-        url: `/auth/third/login/wechat/wechat_miniapp?code=${code}&scene=${uuid}`
+    const res = await loginFly.request({
+        url: `/auth/third/login/wechat_miniapp?code=${code}&scene=${uuid}`,
+        method: 'POST',
     }).catch(console.error)
-    if (res && res.status == 200) {
-        const userInfoRes = res.data.data.userInfo
-        const userInfo = buildLocalUserInfo({
-            ... userInfoRes,
-            access_token: res.data.data.access_token
-        })
-        fly.unlock()
-        return userInfo
+    try{
+        console.log("login",{res})
+        if (res && res.status && (res.status >= 200 && res.status < 300)) {
+            const userInfoRes = res.data.data.userInfo
+            const userInfo = buildLocalUserInfo({
+                ... userInfoRes,
+                access_token: res.data.data.access_token
+            })
+            fly.unlock()
+            return userInfo
+        }
+    }catch(e){
+        console.error(e)
     }
     fly.unlock()
     return Promise.reject(res)
