@@ -32,7 +32,9 @@ const updateUserProfile = async ({ userInfo }: any) => {
             ...userInfo
         }
     })
-    return res.data
+    let u = buildLocalUserInfo(res.data.data)
+    console.log(`更新完毕后`, u)
+    return u
 }
 
 /**
@@ -111,10 +113,8 @@ const autoLoginPlus = async ({
     // console.log('wechat_miniapp_mobile', code);
     try {
         const res = (await httpRequest({
-            url: `/auth/third/login/wechat/wechat_miniapp_mobile`,
-            data: {
-                code
-            }
+            url: `/auth/third/login/wechat_miniapp_mobile?code=${code}`,
+            method: 'POST',
         })).data.data
         console.log(`手机号登录`, res)
 
